@@ -32,7 +32,7 @@ export default function RootLayout({
               </div>
             </header>
 
-            <main className="bg-white/10 backdrop-blur-md rounded-lg p-6 md:p-8 shadow-xl">
+            <main className="p-2 md:p-8">
                 {children}
             </main>
           </div>

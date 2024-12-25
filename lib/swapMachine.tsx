@@ -1,5 +1,30 @@
 import { setup, assign, createActor } from "xstate";
 import matrixHelpers from "@/lib/matrixHelpers"
+
+const initialContext = {
+    score: 0,
+    cursor: {
+        value: 1,
+        x: 0,
+        y: 0,
+    },
+    canva: [
+        [1, 1, 1, 1, 1, 3, 1, 1, 1, 1],
+        [1, 4, 2, 2, 4, 1, 1, 1, 2, 2],
+        [4, 3, 4, 3, 2, 4, 4, 1, 4, 1],
+        [1, 2, 3, 1, 4, 1, 3, 2, 4, 1],
+        [1, 4, 1, 3, 2, 2, 1, 1, 3, 1],
+        [1, 2, 4, 4, 1, 4, 3, 4, 3, 1],
+        [1, 3, 4, 4, 2, 1, 1, 2, 4, 1],
+        [1, 1, 1, 4, 1, 1, 1, 1, 1, 1],
+    ],
+    canvaSize: {
+        width: 10,
+        height: 8,
+    },
+    level: 1,
+};
+
 export const swapMachine = setup({
     types: {
         context: {} as {
@@ -100,10 +125,13 @@ export const swapMachine = setup({
             clonedContext.cursor.value = newData.removedValue;
             return clonedContext;
         }),
-        increment_score: assign(({ context }) => { 
+        increment_score: assign(({ context }) => {
             const clonedContext = structuredClone(context);
             clonedContext.score = clonedContext.score + 1;
             return clonedContext;
+        }),
+        reset_game: assign(({ context }) => {
+            return initialContext;
         }),
         resize_canva: assign(({ context }) => {
             const clonedContext = structuredClone(context);
@@ -172,33 +200,23 @@ export const swapMachine = setup({
         },
     },
 }).createMachine({
-    /** @xstate-layout N4IgpgJg5mDOIC5QCUCutYAcCGBjA1gHQCSEANmAMQCWAdpqgC4D6AtgPYBuYA2gAwBdRKEztY1RtXa1hIAB6IAbHwAchAJwBWAOwBGAEwBmXdv2mVmgDQgAnokNHCAFj6KjDzZqdGAvj+toGDgEJORUdAwsHNw8ukJIIKLiktKyCgia6oaE+uqK6up8TtrqurrF1nYI+nx8hLUNTir5ipp+AehYeESkFDT0TGxcvPrxImISUjIJ6Sr6uhrq2pqKhs1NioqViAC0uorOitqKJsorik6t2u0ggV0hAKKc2GSo2JK0UADC2LTPlPwxokJilpqB0ktNPUsup9CoXMt9EZtggVAtNA1VF4VIYioobndgkQni83h9vr9-rEgUlJqkZogyvlDrosXwHK5SiiatpCDiHAUnLoVFpNPoCZ0iYQSa93nQKX9sADRrJaaC0oy+GVCG5NPtNCpTIZFCoVCjcU56saXPNtKaSoZrv5bpLuoQAOp0SgAJzgjGw3sYgNVIKmGoQxktRUMOlxbjW2m0Tm5JUIxvKJy1jpWbWdhLdAHFsKwwABlMCMVCYSiwf2B5hQYu8QQh5JhhkIJyabJmQxOWFHPh5XTqc16Qi6FbzLWbZrzPzO2jsCBwWT5gitulg+SIfTeCcmNHqYp7419lF7dkaI4nZbaPhwjGGCVBN29MCb9Ud-LZe96Y6uJkk5jmohRuCOSI6Ksz55q6jzPLK5I-Iqn7tuCjImLytQlFctS4to5pFIQdoXPspRIg4TgvvcRCetuapoTu1SFAedojieThnsmtiIKahBeCa-Y6CKP74rBr4hEWJblpWmCofS6ERuUE5NF2ej2uBY4LK04Ezia4ELj4QA */
-    context: {
-        score: 0,
-        cursor: {
-            value: 1,
-            x: 0,
-            y: 0,
-        },
-        canva: [
-            [1, 1, 1, 1, 1, 3, 1, 1, 1, 1],
-            [1, 4, 2, 2, 4, 1, 1, 1, 2, 2],
-            [4, 3, 4, 3, 2, 4, 4, 1, 4, 1],
-            [1, 2, 3, 1, 4, 1, 3, 2, 4, 1],
-            [1, 4, 1, 3, 2, 2, 1, 1, 3, 1],
-            [1, 2, 4, 4, 1, 4, 3, 4, 3, 1],
-            [1, 3, 4, 4, 2, 1, 1, 2, 4, 1],
-            [1, 1, 1, 4, 1, 1, 1, 1, 1, 1],
-        ],
-        canvaSize: {
-            width: 10,
-            height: 8,
-        },
-        level: 1,
-    },
-    id: "Russpack",
+    /** @xstate-layout N4IgpgJg5mDOIC5SwO4EMAOA6A4mgtmAMpgAuArhgMSyloBOpA+lAWANoAMAuoqBgHtYAS1LCBAOz4gAHogAcAZnlZFnACwA2dQHZNARmXz9+gDQgAnogBMigJxZ1AVkWGd1nfOvX1nRQF9-c1RMLABJCAAbMCphCQxyZnwBADcOHmlBETFJaTkEE2tOVU55JydrfU9NJzNLRDVrLDLXdXtdTTtNaydA4PRsCOjY+MSmZLT2fV4kECzRcSlZ-JMNLG0leTt9bSctcysCnQd1LTtOSp19Tj3Faz6QEMGomLiEpNSOaxn+IQXc5YKZQlLQdQzyYx1Q7GRx2OHw7TdPx2B5PLAAURSaEi5DQYgkUAAwmgJFiqFwfnM-jklqB8rYmpptDdFE4ynYlFUDjZ1PosDo-IZzooDPINKiBhisTi8XEiSSyVNKfMaXlEABaawqfR2Jwc0HaOw+OzchC+ByGLQi-RtNmaPQS0KY7G4-Hy0locnfTLUxZqhCKO5YcpKdrWc6aeSaU2ndT8-VatRG3UooKPSUAdTiVHocDojApPuyfsBCDZOiwgsqNx2ep0ptsJxcbg8Xh8fkdz2GudoDFIhdmKpLdIUNpB2j04MhptZDk0gsUOicOlcnG2gTTEgEEDg0ieRf+tNkGr0WB1evkBvURuvpvVmkrnCfF2XuhXrOcndwbBIFAwB9VUtOgtY4J1sHYOXkBt7CwXVXDufQtXtdx5C-IYwAA4djwKIonErNk9k0NRDBcJwZzZVRmzaQxrgubQv2dGU3WJD1MIBEczQcQj5B0AVFGoqMoRsRdHGbSovF1TZ1C-LMjyHdjsLaJoqyQxMRWsaCVD4xDSgqOxeUXDd-CAA */
+    context: initialContext,
+    id: "swap",
     initial: "GameSetup",
     states: {
+        GameSetup: {
+            on: {
+                start_game: [
+                    {
+                        target: "Idle",
+                        actions: [
+                            { type: "reset_game" }
+                        ],
+                    }
+                ]
+            },
+        },
         Idle: {
             on: {
                 input_move: [
@@ -226,6 +244,10 @@ export const swapMachine = setup({
                         ],
                     },
                 ],
+                restart: {
+                    target: "GameSetup",
+                    reenter: true
+                },
             },
         },
 
@@ -254,7 +276,6 @@ export const swapMachine = setup({
         },
 
         Win: {
-            type: "final",
             on: {
                 restart: {
                     target: "GameSetup",
@@ -263,11 +284,6 @@ export const swapMachine = setup({
             },
         },
 
-        GameSetup: {
-            on: {
-                start_game: "Idle"
-            }
-        }
     },
 });
 

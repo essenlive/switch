@@ -48,7 +48,11 @@ export default function Home() {
         break;
       case " ":
         event.preventDefault()
-        swapActor.send({ type: 'start_game', direction: 'down' })
+        if (state === 'GameSetup') {
+          swapActor.send({ type: 'start_game', direction: 'down' })
+        }else{
+          swapActor.send({ type: 'restart', direction: 'down' })
+        }
         break;
       default:
         break;
@@ -77,7 +81,7 @@ export default function Home() {
             <div
               key={`col ${x}`}
             className={cn("m-1 pt-2 gray-700 text-center font-mono text-sm", 
-              x === 0 ? 'w-14' : 'w-8',
+              x === 0 ? 'w-10 md:w-16' : 'md:w-8 w-5',
               x === context.cursor.x + 1 ? 'font-bold' : '')}
             >
               {x === 0 ? '' : `col ${x-1} `}
@@ -91,7 +95,7 @@ export default function Home() {
             {showIndexes && (
               <div
                 key={`row ${y}`}
-                className={cn("m-1 pr-2 w-14 h-8 gray-700 text-right font-mono text-sm",
+                className={cn("m-1 pr-2 md:w-16 w-10 md:h-8 h-5 gray-700 text-right font-mono text-sm",
                 y === context.cursor.y  ? 'font-bold' : '')}>
                 {`row ${y}`}
               </div>
@@ -103,7 +107,7 @@ export default function Home() {
               <div
                 key={`x-${x} `}
                 className={cn(
-                  "w-8 h-8 m-1 rounded-sm transition-all duration-300 flex justify-center align-middle text-center bg-gray-200",
+                  "md:w-8 w-5 md:h-8 h-5 m-1 rounded-sm transition-all duration-300 flex justify-center align-middle text-center bg-gray-200",
                   `x-${x}`,
                   BLOCK_COLORS[cell],
                   context.cursor.y === y && context.cursor.x === x && BLOCK_COLORS[context.cursor.value]
