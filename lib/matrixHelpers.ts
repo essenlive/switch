@@ -1,12 +1,12 @@
 const matrixHelpers = {
     removePadding(canva: number[][]) {
-        let trimmedCanva = structuredClone(canva)
+        const trimmedCanva = structuredClone(canva)
         trimmedCanva.pop(); trimmedCanva.shift();
         trimmedCanva.forEach(row => { row.pop(); row.shift(); })
         return trimmedCanva
     },
     addPadding(canva: number[][], value:number) {
-        let paddedCanva = structuredClone(canva)
+        const paddedCanva = structuredClone(canva)
         paddedCanva.forEach(row => {
             row.push(value);
             row.unshift(value);
@@ -17,7 +17,7 @@ const matrixHelpers = {
     },
     removeRows(canva: number[][], rowsIndexes: number[]) {
         rowsIndexes = rowsIndexes.sort((a, b) => b - a);
-        let newCanva = structuredClone(canva)
+        const newCanva = structuredClone(canva)
         rowsIndexes.forEach(rowIndex => {
             newCanva.splice(rowIndex, 1);
         })
@@ -25,13 +25,13 @@ const matrixHelpers = {
         return newCanva
     },
     removeRow(canva: number[][], rowIndex: number) {
-        let newCanva = structuredClone(canva)
+        const newCanva = structuredClone(canva)
         newCanva.splice(rowIndex, 1);
         return newCanva
     },
     removeColumns(canva: number[][], columnsIndexes: number[]) {
         columnsIndexes = columnsIndexes.sort((a, b) => b - a);
-        let newCanva = structuredClone(canva)
+        const newCanva = structuredClone(canva)
         newCanva.forEach(row => {
             columnsIndexes.forEach(columnIndex => {
                 row.splice(columnIndex, 1);
@@ -40,7 +40,7 @@ const matrixHelpers = {
         return newCanva
     },
     removeColumn(canva: number[][], columnIndex: number) {
-        let newCanva = structuredClone(canva)
+        const newCanva = structuredClone(canva)
         newCanva.forEach(row => {
             row.splice(columnIndex, 1);
         });
@@ -49,7 +49,7 @@ const matrixHelpers = {
     // Add an item to the start of a specific row
     addToRowStart(canva: number[][], rowIndex: number, newItem: number) {
         canva[rowIndex].unshift(newItem);
-        let removedValue = canva[rowIndex].pop() ?? newItem  ;
+        const removedValue = canva[rowIndex].pop() ?? newItem  ;
         return {
             removedValue,
             canva
@@ -59,7 +59,7 @@ const matrixHelpers = {
     // Add an item to the end of a specific row
     addToRowEnd(canva: number[][], rowIndex: number, newItem: number) {
         canva[rowIndex].push(newItem);
-        let removedValue = canva[rowIndex].shift() ?? newItem;
+        const removedValue = canva[rowIndex].shift() ?? newItem;
         return {
             removedValue,
             canva
@@ -72,7 +72,7 @@ const matrixHelpers = {
         let itemToShift = newItem;
         canva.forEach(row => {
             // Store the item that will be shifted out
-            let tempItemValue = row[columnIndex];
+            const tempItemValue = row[columnIndex];
             row[columnIndex] = itemToShift;
             itemToShift = tempItemValue;
         });
@@ -89,7 +89,7 @@ const matrixHelpers = {
         let itemToShift = newItem;
         canva.reverse().forEach(row => {
             // Store the item that will be shifted out
-            let tempItemValue = row[columnIndex];
+            const tempItemValue = row[columnIndex];
             row[columnIndex] = itemToShift;
             itemToShift = tempItemValue;
         });

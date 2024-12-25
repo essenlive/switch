@@ -1,7 +1,8 @@
 'use client'
 
 import { useSelector } from '@xstate/react';
-import { russPack } from "@/lib/russMachine"
+// import { russPack } from "@/lib/russMachine"
+import { swapActor } from "@/lib/swapMachine"
 import { useEffect, useCallback } from 'react'
 import matrixHelpers from '@/lib/matrixHelpers';
 import { cn } from '@/lib/utils';
@@ -32,7 +33,7 @@ const selectContext = (snapshot: any) => snapshot.context;
 
 
 export default function Home() {
-  const context = useSelector(russPack, selectContext);
+  const context = useSelector(swapActor, selectContext);
   // const canva: Canva = useSelector(russPack, selectCanva);
   // const cursor: Cursor = useSelector(russPack, selectCursor);
   // const canvaSize: CanvaSize  = useSelector(russPack, selectCanvaSize);
@@ -42,25 +43,26 @@ export default function Home() {
   // console.log('size', context.canvaSize);
   
 
-  console.log("X : ", context.cursor.x, "| Y : ", context.cursor.y, "| v : ", context.cursor.value, "| height : ", context.canvaSize.height, "| width : ", context.canvaSize.width);
+  // console.log("X : ", context.cursor.x, "| Y : ", context.cursor.y, "| v : ", context.cursor.value, "| height : ", context.canvaSize.height, "| width : ", context.canvaSize.width);
 
-  const handleKeyPress = useCallback((event: any) => {
+  const handleKeyPress = useCallback((event: KeyboardEvent) => {
+    
     switch (event.key) {
       case "ArrowLeft":
         event.preventDefault()
-        russPack.send({ type: 'input_move', direction: 'left' })
+        swapActor.send({ type: 'input_move', direction: 'left' })
         break;
       case "ArrowRight":
         event.preventDefault()
-        russPack.send({ type: 'input_move', direction: 'right' })
+        swapActor.send({ type: 'input_move', direction: 'right' })
         break;
       case "ArrowUp":
         event.preventDefault()
-        russPack.send({ type: 'input_move', direction: 'up' })
+        swapActor.send({ type: 'input_move', direction: 'up' })
         break;
       case "ArrowDown":
         event.preventDefault()
-        russPack.send({ type: 'input_move', direction: 'down' })
+        swapActor.send({ type: 'input_move', direction: 'down' })
         break;
       default:
         break;
@@ -76,12 +78,31 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center p-4">
       <div className="border-2 border-white flex flex-col-reverse">
+
+      {/* Column indexes */}
+        <div key={`hy`} className={`hy flex`}>
+        {Array(context.canvaSize.width + 3).fill(0).map((col, x) => (
+            <div
+              key={`col ${x}`}
+            className={cn("pt-2 border border-white gray-700 text-center font-mono text-sm", 
+              x === 0 ? 'w-24' : 'w-8',
+              x === context.cursor.x + 1 ? 'font-bold' : '')}
+            >
+              {x === 0 ? '' : `col ${x-1} `}
+            </div>
+        ))}
+        </div>
+
         {matrixHelpers.addPadding(context.canva, 0).map((row, y) => (
           <div key={`y-${y}`} className={`y-${y} flex`}>
+            {/* Row indexes */}
             <div
-              key={`row-${y} | ${(y - 1 > 0 && y - 1 < context.canvaSize) ? y : ""} `}
-              className={"pr-2 h-8 border border-white  gray-700 text-right font-mono text-sm"}
-            > {`row ${y} `} </div>
+              key={`row ${y}`}
+              className={cn("pr-2 w-24 h-8 border border-white  gray-700 text-right font-mono text-sm",
+              y === context.cursor.y  ? 'font-bold' : '')}>
+              {`row ${y}`}
+            </div>
+
             {row.map((cell, x) => (
               
              

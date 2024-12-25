@@ -1,12 +1,12 @@
 import { createMachine, createActor, assign } from "xstate";
 import matrixHelpers from "@/lib/matrixHelpers"
-import { createBrowserInspector } from '@statelyai/inspect';
 
-const { inspect } = createBrowserInspector(); 
+// import { createBrowserInspector } from '@statelyai/inspect';
+// const { inspect } = createBrowserInspector(); 
 
 const russMachine = createMachine(
     {
-        /** @xstate-layout N4IgpgJg5mDOIC5QCUCutYAcCGBjA1gHQCSEANmAMQCWAdpqgC4D6AtgPYBuYA2gAwBdRKEztY1RtXa1hIAB6IATAE5lhVQA4AbIr4BmRQHYtAVgCMhgCwAaEAE8lhA4o0a9Z5XzdmTevQF9-WzQMHAIScio6BhYObh4zISQQUXFJaVkFBEUtNSstPh1LRUsTHOUbe0QPPnVLAz4ylzLLDUVA4PQsPCJSChp6JjYuXkUkkTEJKRlkrJKTQi8vZUUfVcszPS1bB2zlLUJDE0tDQ09DRtLCjpAQ7vCAUU5sMlRsSVooAGFsWmfKfjjFKTdIzUBZAqEIxeSxeEqWLSlDQmHaISytKEVGF6dFaTY4m53MJEJ4vN4fb6-f4JIGpKYZWaILSGKGWZTePy5MoaQyohAmQwaQhuZRWDRmTY8raErrEwik17vOiUv7YAFjWR00GZRAAWjMfBZBr0GmUZm0m1Wyj0fNc6j4+y07l85sCQRAtHYEDgsiJPU1IOmOoQ+pMC2NpvNeIMHhtVRDFkUhxhbMMflafAsMtCPQiFADaSDjIQZiMmNMWlMemtejTyj5uuRUJhZU8+jOBPdfsez0VFJ+qoL9LB8mqQosbQleLWZo0fPTmJK3hMmb4XhM2fuRAA6nQh9rizizMKPB54Yoj2G+cc9IRmac9JditaNG7-EA */
+        /** @xstate-layout N4IgpgJg5mDOIC5QCUCutYAcCGBjA1gHQCSEANmAMQCWAdpqgC4D6AtgPYBuYA2gAwBdRKEztY1RtXa1hIAB6IATAE5lhVQA4AbIr4BmRQHYtAVgCMhgCwAaEAE8lhA4o0a9Z5XzdmTevQF9-WzQMHAIScio6BhYObh4zISQQUXFJaVkFBEUtNSstPh1LRUsTHOUbe0QPPnVLAz4ylzLLDUVA4PQsPCJSChp6JjYuXkUkkTEJKRlkrJKTQi8vZUUfVcszPS1bB2zlLUJDE0tDQ09DRtLCjpAQ7vCAUU5sMlRsSVooAGFsWmfKfjjFKTdIzUBZAqEIxeSxeEqWLSlDQmHaISytKEVGF6dFaTY4m53MJEJ4vN4fb6-f4JIGpKYZWaILSGKGWZTePy5MoaQyohAmQwaQhuZRWDRmTY8raErrEwik17vOiUv7YAFjWR00GZRAAWjMfBZBr0GmUZm0m1Wyj0fNc6j4+y07l85ploR6hAA6nRKAAnOCMbC+xiAzUg6Y6-l8Wris14lYnJ2VXbHA4WU56S7Fa0aN33IgAZTAjFQmEosEDweYUGwrF4gjDaQjjIQp0Uiw0fEUfhxuROZj5uvchFhJi0uWR8YRehMgSCIFo7AgcFkRJ6jfpYPkep8C2NpvNeIMHhtVQQ+sM7YuGgR+kvhuMhjzcr6YA32pbZiMmNM4981r0Qw9GUQdkShGEyk8O9rUsZ8PQVcllR+VV32bcFqiFCw2glPE1jNDQ+T8SxMRKbwTD4A0vFnec13Cb0ty1NDtwQHEzGFDwPHhbsNhMFEz2OPRCGZDMsxUE04PCIsS0wVCGXQ1tVCErtOxxNpjkFPkJUEh9fFWRR9K-B0538IA */
         context: {
             cursor: {
                 value: 1,
@@ -29,8 +29,8 @@ const russMachine = createMachine(
             },
             level: 1,
         },
-        id: "Russpack",
-        initial: "Idle",
+        id: "swap",
+        initial: "Setup",
         states: {
             Idle: {
                 on: {
@@ -61,6 +61,7 @@ const russMachine = createMachine(
                     ],
                 },
             },
+
             EvaluatingCanva: {
                 always: [
                     {
@@ -84,9 +85,20 @@ const russMachine = createMachine(
                     },
                 ],
             },
+
             Win: {
                 type: "final",
+
+                on: {
+                    restart: "Setup"
+                }
             },
+
+            Setup: {
+                on: {
+                    start_game: "Idle"
+                }
+            }
         },
     },
     {
@@ -136,11 +148,10 @@ const russMachine = createMachine(
 
                     return clonedContext
             }),
-            resize_canva: assign(({ context, event }) => {
+            resize_canva: assign(({ context }) => {
                 console.log("📏 resize canva");
                 let clonedContext = structuredClone(context);
                 let { rows, columns } = matrixHelpers.checkValues(clonedContext.canva);
-                console.log("X : ", clonedContext.cursor.x, "| Y : ", clonedContext.cursor.y, "| v : ", clonedContext.cursor.value, "| height : ", clonedContext.canvaSize.height, "| width : ", clonedContext.canvaSize.width);
                 if (rows.length > 0){
                     console.log("❇️ Remove rows : ", rows[0]);
                     clonedContext.canva = matrixHelpers.removeRow(clonedContext.canva, rows[0]);
@@ -154,7 +165,6 @@ const russMachine = createMachine(
                     clonedContext.cursor.x = clonedContext.cursor.x === 0 ? 0 : clonedContext.cursor.x - 1;
                 }
 
-                console.log("X : ", clonedContext.cursor.x, "| Y : ", clonedContext.cursor.y, "| v : ", clonedContext.cursor.value, "| height : ", clonedContext.canvaSize.height, "| width : ", clonedContext.canvaSize.width);
                 return clonedContext
              }),
         },
@@ -183,7 +193,7 @@ const russMachine = createMachine(
                 }
                 return false;
             },
-            is_full_line: ({ context, event }) => {
+            is_full_line: ({ context }) => {
                 let { rows, columns } = matrixHelpers.checkValues(context.canva);
                 console.log("📏 check full line");
                 if (rows.length > 0 || columns.length > 0){
@@ -191,7 +201,7 @@ const russMachine = createMachine(
                 }
                 return false;
             },
-            is_win_condition: ({ context, event }) => {
+            is_win_condition: ({ context }) => {
                 console.log("🏆 check win condition");
                 if (context.canva.length <= 1 || context.canva.length[0] <= 1) {
                     console.log("🏆 It is a win");
@@ -207,12 +217,12 @@ const russMachine = createMachine(
 
 
 export const russPack = createActor(russMachine, {
-    inspect,
-    // inspect : (inspEv) =>{
-    // if (inspEv.type === "@xstate.event") console.log("event :", inspEv.event.type);
-    // if (inspEv.type === "@xstate.snapshot") console.log("state :",  inspEv.snapshot.value);
+    // inspect,
+    inspect : (inspEv) =>{
+    if (inspEv.type === "@xstate.event") console.log("event :", inspEv.event.type);
+    if (inspEv.type === "@xstate.snapshot") console.log("state :",  inspEv.snapshot.value);
 
-    // }
+    }
 }
 );
 russPack.start();
