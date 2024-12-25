@@ -1,7 +1,7 @@
 'use client'
 
-import { useMachine } from '@xstate/react';
-import { swapMachine } from "@/lib/swapMachine"
+import { useSelector } from '@xstate/react';
+import { swapActor } from "@/lib/swapMachine"
 import { useEffect, useCallback } from 'react'
 import matrixHelpers from '@/lib/matrixHelpers';
 import { cn } from '@/lib/utils';
@@ -16,33 +16,36 @@ const BLOCK_COLORS = [
 const showValues = false;
 const showIndexes = false;
 
+const selectContext = ({context}) => context
+
+
 
 export default function Home() {
-  const [snapshot, send] = useMachine(swapMachine);
-
+  const context = useSelector(swapActor, selectContext);
+  
   const handleKeyPress = useCallback((event: KeyboardEvent) => {
     
     switch (event.key) {
       case "ArrowLeft":
         event.preventDefault()
-        send({ type: 'input_move', direction: 'left' })
+        swapActor.send({ type: 'input_move', direction: 'left' })
         break;
       case "ArrowRight":
         event.preventDefault()
-        send({ type: 'input_move', direction: 'right' })
+        swapActor.send({ type: 'input_move', direction: 'right' })
         break;
       case "ArrowUp":
         event.preventDefault()
-        send({ type: 'input_move', direction: 'up' })
+        swapActor.send({ type: 'input_move', direction: 'up' })
         break;
       case "ArrowDown":
         event.preventDefault()
-        send({ type: 'input_move', direction: 'down' })
+        swapActor.send({ type: 'input_move', direction: 'down' })
         break;
       default:
         break;
     }
-  }, [send]);
+  }, []);
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyPress);
@@ -56,26 +59,26 @@ export default function Home() {
       {/* Column indexes */}
       {showIndexes && (
         <div key={`hy`} className={`hy flex`}>
-        {Array(snapshot.context.canvaSize.width + 3).fill(0).map((col, x) => (
+        {Array(context.canvaSize.width + 3).fill(0).map((col, x) => (
             <div
               key={`col ${x}`}
             className={cn("m-1 pt-2 gray-700 text-center font-mono text-sm", 
               x === 0 ? 'w-14' : 'w-8',
-              x === snapshot.context.cursor.x + 1 ? 'font-bold' : '')}
+              x === context.cursor.x + 1 ? 'font-bold' : '')}
             >
               {x === 0 ? '' : `col ${x-1} `}
             </div>
         ))}
         </div>
       )}
-        {matrixHelpers.addPadding(snapshot.context.canva, 0).map((row, y) => (
+        {matrixHelpers.addPadding(context.canva, 0).map((row, y) => (
           <div key={`y-${y}`} className={`y-${y} flex`}>
             {/* Row indexes */}
             {showIndexes && (
               <div
                 key={`row ${y}`}
                 className={cn("m-1 pr-2 w-14 h-8 gray-700 text-right font-mono text-sm",
-                y === snapshot.context.cursor.y  ? 'font-bold' : '')}>
+                y === context.cursor.y  ? 'font-bold' : '')}>
                 {`row ${y}`}
               </div>
             )}
@@ -89,10 +92,10 @@ export default function Home() {
                   "w-8 h-8 m-1 rounded-sm transition-all duration-300 flex justify-center align-middle text-center bg-gray-200",
                   `x-${x}`,
                   BLOCK_COLORS[cell],
-                  snapshot.context.cursor.y === y && snapshot.context.cursor.x === x && BLOCK_COLORS[snapshot.context.cursor.value]
+                  context.cursor.y === y && context.cursor.x === x && BLOCK_COLORS[context.cursor.value]
                 )}
               >
-                {showValues && (snapshot.context.cursor.y === y && snapshot.context.cursor.x === x) ? snapshot.context.cursor.value : showValues && cell !== 0 && cell}
+                {showValues && (context.cursor.y === y && context.cursor.x === x) ? context.cursor.value : showValues && cell !== 0 && cell}
               </div>
             ))}
           </div>

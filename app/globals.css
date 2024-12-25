@@ -1,10 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+/* 
 body {
-  font-family: Geist, Arial, Helvetica, sans-serif;
-}
+  font-family: Nunito, Arial, Helvetica, sans-serif;
+} */
 
 @layer base {
   :root {

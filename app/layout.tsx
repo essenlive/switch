@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-import { Button } from "@/components/ui/button"
-import { Settings, Star } from 'lucide-react'
+import Score from "@/components/score"
 import "./globals.css";
-import { Inter } from 'next/font/google'
+import { Nunito } from 'next/font/google'
 
-// If loading a variable font, you don't need to specify the font weight
-const inter = Inter({
+
+const nunito = Nunito({
   subsets: ['latin'],
   display: 'swap',
 })
@@ -21,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.className}>
+    <html lang="en" className={nunito.className}>
       <body className={`antialiased`}>
 
         <div className="min-h-screen bg-gray-100 text-black  p-4 md:p-8">
@@ -29,14 +28,7 @@ export default function RootLayout({
             <header className="flex justify-between items-center mb-8">
               <h1 className="text-2xl md:text-4xl font-bold">SWAP</h1>
               <div className="flex items-center space-x-4">
-                <div className="flex items-center">
-                  <Star className="w-5 h-5 mr-2" />
-                  <span className="text-lg md:text-xl font-semibold">1337</span>
-                </div>
-                <Button variant="outline" size="icon">
-                  <Settings className="w-5 h-5" />
-                  <span className="sr-only">Settings</span>
-                </Button>
+                <Score />
               </div>
             </header>
 

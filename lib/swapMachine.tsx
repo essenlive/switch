@@ -1,8 +1,9 @@
-import { setup, assign } from "xstate";
+import { setup, assign, createActor } from "xstate";
 import matrixHelpers from "@/lib/matrixHelpers"
 export const swapMachine = setup({
     types: {
         context: {} as {
+            score: number;
             cursor: {
                 x: number,
                 y: number,
@@ -100,6 +101,11 @@ export const swapMachine = setup({
             clonedContext.cursor.value = newData.removedValue;
             return clonedContext;
         }),
+        increment_score: assign(({ context }) => { 
+            const clonedContext = structuredClone(context);
+            clonedContext.score = clonedContext.score + 1;
+            return clonedContext;
+        }),
         resize_canva: assign(({ context }) => {
             console.log("\\uD83D\\uDCCF resize canva");
             const clonedContext = structuredClone(context);
@@ -175,7 +181,9 @@ export const swapMachine = setup({
         },
     },
 }).createMachine({
+    /** @xstate-layout N4IgpgJg5mDOIC5QCUCutYAcCGBjA1gHQDKYALqpgMSxnYBOZA+lNgLZgDaADALqKhMAe1gBLMqKEA7ASAAeiABwAmRYQCMAdgCcANk26AzABZji3d10AaEAE9Ey5QFZC2g04tvHm40YC+fjZoGDgEhACSEAA2YFSiUpiozGxCAG5cfLLCYhLSsgoI6urc3BqKhk6a5pqGhpqaTjb2hVWEhsq6HtzKtcrqyprKAUHoWHhEkTFxCUlMKemc6vxIINnikjIrBYrqxoSK5bWK3E7GNb5NDnqEysbF7bs+uha6wyDBY2GTsfGJyWlcZTLQQidZ5LZKVQaHT6IymcyWS4IHaEJwlErOJw9GqGV6Bd6jUJEACiqWwUVQ2AkUigAGFsFIyVQeMDVqDcptQAVbspCM9jJZ1LiTooBeokY41I5Op4sWdcYo3h8iYRSeTKdS6QymYtWWsOflEHdXNpTWbzabzBLDNo2tpRYYduZ1IoPJolYTxqqyRSqfEtYzsMygVl2RtDQgeXzdALdEKLE5RdxxXZECY1G4ZQrDCcnE4PSEvQB1eJUehwOiMFmhnLhiEIJxuQjcQz9G3FPPGbQS5yudyeQYDXyGAL4qRCCBwWTK8Y1sGc+SIAC0umb6PXG92SJXa-XyjcJh6zgLnyIpAomDnBvrmm4tq0enqfTjyc0PdXZxlce0jg8Q3xM5fNEYBXnWXKIEUoquLUia7NwDSGNahj7B0HgeNoxh1LoHQniqaq+pq9KBqB4LgQgXaor4iiaC6ByNmi3apggtSrhU6iVMm+hOHU5S4cW8QkQuBSmLyLb9AK+7Ck47E9i40oeK6R5mPmo5AA */
     context: {
+        score: 0,
         cursor: {
             value: 1,
             x: 0,
@@ -218,18 +226,20 @@ export const swapMachine = setup({
                     },
                     {
                         target: "Idle",
-                        actions: {
-                            type: "move_cursor",
-                        },
+                        actions: [
+                            { type: "move_cursor"},
+                            { type: "increment_score"}
+                        ],
                         guard: {
                             type: "is_cursor_move",
                         },
                     },
                     {
                         target: "EvaluatingCanva",
-                        actions: {
-                            type: "shift_canva",
-                        },
+                        actions: [
+                            { type: "shift_canva" },
+                            { type: "increment_score" }
+                        ],
                     },
                 ],
             },
@@ -268,3 +278,5 @@ export const swapMachine = setup({
     },
 });
 
+export const swapActor = createActor(swapMachine);
+swapActor.start();
