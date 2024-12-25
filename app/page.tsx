@@ -40,7 +40,7 @@ export default function Home() {
       default:
         break;
     }
-  }, []);
+  }, [send]);
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyPress);

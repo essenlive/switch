@@ -1,4 +1,4 @@
-import { setup, assign, createActor } from "xstate";
+import { setup, assign } from "xstate";
 import matrixHelpers from "@/lib/matrixHelpers"
 export const swapMachine = setup({
     types: {
