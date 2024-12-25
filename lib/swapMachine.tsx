@@ -1,6 +1,6 @@
 import { setup, assign, createActor } from "xstate";
 import matrixHelpers from "@/lib/matrixHelpers"
-export const machine = setup({
+export const swapMachine = setup({
     types: {
         context: {} as {
             cursor: {
@@ -32,7 +32,7 @@ export const machine = setup({
     actions: {
         move_cursor: assign({
             cursor: ({ context, event }) => {
-                let clonedContext = structuredClone( context );
+                const clonedContext = structuredClone( context );
                 switch (event.direction) {
                     case "up":
                         clonedContext.cursor.y++;
@@ -54,7 +54,7 @@ export const machine = setup({
         }),
         shift_canva: assign(({ context, event }) => {
             console.log("\\uD83D\\uDD01 shift canva");
-            let clonedContext = structuredClone(context);
+            const clonedContext = structuredClone(context);
             let newData : {
                 removedValue: number,
                 canva: number[][]
@@ -102,8 +102,8 @@ export const machine = setup({
         }),
         resize_canva: assign(({ context }) => {
             console.log("\\uD83D\\uDCCF resize canva");
-            let clonedContext = structuredClone(context);
-            let { rows, columns } = matrixHelpers.checkValues(clonedContext.canva);
+            const clonedContext = structuredClone(context);
+            const { rows, columns } = matrixHelpers.checkValues(clonedContext.canva);
             if (rows.length > 0) {
                 console.log("\\u2747\\uFE0F Remove rows : ", rows[0]);
                 clonedContext.canva = matrixHelpers.removeRow(
@@ -166,7 +166,7 @@ export const machine = setup({
             return false;
         },
         is_full_line: ({ context }) => {
-            let { rows, columns } = matrixHelpers.checkValues(context.canva);
+            const { rows, columns } = matrixHelpers.checkValues(context.canva);
             console.log("\\uD83D\\uDCCF check full line");
             if (rows.length > 0 || columns.length > 0) {
                 return true;
@@ -198,7 +198,7 @@ export const machine = setup({
         level: 1,
     },
     id: "Russpack",
-    initial: "Setup",
+    initial: "Idle",
     states: {
         Setup: {
             on: {
@@ -268,16 +268,3 @@ export const machine = setup({
     },
 });
 
-
-
-export const swapActor = createActor(machine, {
-    // inspect,
-    // inspect : (inspEv) =>{
-    // if (inspEv.type === "@xstate.event") console.log("event :", inspEv.event.type);
-    // if (inspEv.type === "@xstate.snapshot") console.log("state :",  inspEv.snapshot.value);
-
-    // }
-}
-);
-swapActor.start();
-swapActor.send({ type : "start_game", direction : "up" });
