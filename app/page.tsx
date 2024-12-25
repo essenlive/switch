@@ -13,6 +13,8 @@ const BLOCK_COLORS = [
   'bg-green-500',
   'bg-yellow-500',
 ];
+const showValues = false;
+const showIndexes = false;
 
 
 export default function Home() {
@@ -49,32 +51,34 @@ export default function Home() {
 
   
   return (
-    <div className="flex flex-col items-center p-4">
-      <div className="border-2 border-white flex flex-col-reverse">
+      <div className="flex items-center flex-col-reverse">
 
       {/* Column indexes */}
+      {showIndexes && (
         <div key={`hy`} className={`hy flex`}>
         {Array(snapshot.context.canvaSize.width + 3).fill(0).map((col, x) => (
             <div
               key={`col ${x}`}
-            className={cn("pt-2 border border-white gray-700 text-center font-mono text-sm", 
-              x === 0 ? 'w-24' : 'w-8',
+            className={cn("m-1 pt-2 gray-700 text-center font-mono text-sm", 
+              x === 0 ? 'w-14' : 'w-8',
               x === snapshot.context.cursor.x + 1 ? 'font-bold' : '')}
             >
               {x === 0 ? '' : `col ${x-1} `}
             </div>
         ))}
         </div>
-
+      )}
         {matrixHelpers.addPadding(snapshot.context.canva, 0).map((row, y) => (
           <div key={`y-${y}`} className={`y-${y} flex`}>
             {/* Row indexes */}
-            <div
-              key={`row ${y}`}
-              className={cn("pr-2 w-24 h-8 border border-white  gray-700 text-right font-mono text-sm",
-              y === snapshot.context.cursor.y  ? 'font-bold' : '')}>
-              {`row ${y}`}
-            </div>
+            {showIndexes && (
+              <div
+                key={`row ${y}`}
+                className={cn("m-1 pr-2 w-14 h-8 gray-700 text-right font-mono text-sm",
+                y === snapshot.context.cursor.y  ? 'font-bold' : '')}>
+                {`row ${y}`}
+              </div>
+            )}
 
             {row.map((cell, x) => (
               
@@ -82,18 +86,17 @@ export default function Home() {
               <div
                 key={`x-${x} `}
                 className={cn(
-                  "w-8 h-8 border border-gray-200 transition-all duration-300 text-center",
+                  "w-8 h-8 m-1 rounded-sm transition-all duration-300 flex justify-center align-middle text-center bg-gray-200",
                   `x-${x}`,
                   BLOCK_COLORS[cell],
                   snapshot.context.cursor.y === y && snapshot.context.cursor.x === x && BLOCK_COLORS[snapshot.context.cursor.value]
                 )}
               >
-                {(snapshot.context.cursor.y === y && snapshot.context.cursor.x === x) ? snapshot.context.cursor.value : cell !== 0 && cell}
+                {showValues && (snapshot.context.cursor.y === y && snapshot.context.cursor.x === x) ? snapshot.context.cursor.value : showValues && cell !== 0 && cell}
               </div>
             ))}
           </div>
         ))}
       </div>
-    </div>
   );
 }
