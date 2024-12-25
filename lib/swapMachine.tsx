@@ -54,7 +54,6 @@ export const swapMachine = setup({
             },
         }),
         shift_canva: assign(({ context, event }) => {
-            console.log("\\uD83D\\uDD01 shift canva");
             const clonedContext = structuredClone(context);
             let newData : {
                 removedValue: number,
@@ -107,11 +106,9 @@ export const swapMachine = setup({
             return clonedContext;
         }),
         resize_canva: assign(({ context }) => {
-            console.log("\\uD83D\\uDCCF resize canva");
             const clonedContext = structuredClone(context);
             const { rows, columns } = matrixHelpers.checkValues(clonedContext.canva);
             if (rows.length > 0) {
-                console.log("\\u2747\\uFE0F Remove rows : ", rows[0]);
                 clonedContext.canva = matrixHelpers.removeRow(
                     clonedContext.canva,
                     rows[0],
@@ -120,7 +117,6 @@ export const swapMachine = setup({
                 clonedContext.cursor.y =
                     clonedContext.cursor.y === 0 ? 0 : clonedContext.cursor.y - 1;
             } else if (columns.length > 0) {
-                console.log("\\u2747\\uFE0F Remove columns : ", columns[0]);
                 clonedContext.canva = matrixHelpers.removeColumn(
                     clonedContext.canva,
                     columns[0],
@@ -143,7 +139,6 @@ export const swapMachine = setup({
                 (context.cursor.x >= context.canvaSize.width + 1 &&
                     event.direction === "right")
             ) {
-                console.log("\\uD83D\\uDFE5 invalid move");
                 return true;
             }
             return false;
@@ -158,22 +153,18 @@ export const swapMachine = setup({
                     context.cursor.x === context.canvaSize.width + 1) &&
                     (event.direction === "up" || event.direction === "down"))
             ) {
-                console.log("\\u2705 simple move");
                 return true;
             }
             return false;
         },
         is_win_condition: ({ context }) => {
-            console.log("\\uD83C\\uDFC6 check win condition");
             if (context.canva.length <= 1 || context.canva[0].length <= 1) {
-                console.log("\\uD83C\\uDFC6 It is a win");
                 return true;
             }
             return false;
         },
         is_full_line: ({ context }) => {
             const { rows, columns } = matrixHelpers.checkValues(context.canva);
-            console.log("\\uD83D\\uDCCF check full line");
             if (rows.length > 0 || columns.length > 0) {
                 return true;
             }
@@ -181,7 +172,7 @@ export const swapMachine = setup({
         },
     },
 }).createMachine({
-    /** @xstate-layout N4IgpgJg5mDOIC5QCUCutYAcCGBjA1gHQDKYALqpgMSxnYBOZA+lNgLZgDaADALqKhMAe1gBLMqKEA7ASAAeiABwAmRYQCMAdgCcANk26AzABZji3d10AaEAE9Ey5QFZC2g04tvHm40YC+fjZoGDgEhACSEAA2YFSiUpiozGxCAG5cfLLCYhLSsgoI6urc3BqKhk6a5pqGhpqaTjb2hVWEhsq6HtzKtcrqyprKAUHoWHhEkTFxCUlMKemc6vxIINnikjIrBYrqxoSK5bWK3E7GNb5NDnqEysbF7bs+uha6wyDBY2GTsfGJyWlcZTLQQidZ5LZKVQaHT6IymcyWS4IHaEJwlErOJw9GqGV6Bd6jUJEACiqWwUVQ2AkUigAGFsFIyVQeMDVqDcptQAVbspCM9jJZ1LiTooBeokY41I5Op4sWdcYo3h8iYRSeTKdS6QymYtWWsOflEHdXNpTWbzabzBLDNo2tpRYYduZ1IoPJolYTxqqyRSqfEtYzsMygVl2RtDQgeXzdALdEKLE5RdxxXZECY1G4ZQrDCcnE4PSEvQB1eJUehwOiMFmhnLhiEIJxuQjcQz9G3FPPGbQS5yudyeQYDXyGAL4qRCCBwWTK8Y1sGc+SIAC0umb6PXG92SJXa-XyjcJh6zgLnyIpAomDnBvrmm4tq0enqfTjyc0PdXZxlce0jg8Q3xM5fNEYBXnWXKIEUoquLUia7NwDSGNahj7B0HgeNoxh1LoHQniqaq+pq9KBqB4LgQgXaor4iiaC6ByNmi3apggtSrhU6iVMm+hOHU5S4cW8QkQuBSmLyLb9AK+7Ck47E9i40oeK6R5mPmo5AA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QCUCutYAcCGBjA1gHQCSEANmAMQCWAdpqgC4D6AtgPYBuYA2gAwBdRKEztY1RtXa1hIAB6IAbHwAchAJwBWAOwBGAEwBmXdv2mVmgDQgAnokNHCAFj6KjDzZqdGAvj+toGDgEJORUdAwsHNw8ukJIIKLiktKyCgia6oaE+uqK6up8TtrqurrF1nYI+nx8hLUNTir5ipp+AehYeESkFDT0TGxcvPrxImISUjIJ6Sr6uhrq2pqKhs1NioqViAC0uorOitqKJsorik6t2u0ggV0hAKKc2GSo2JK0UADC2LTPlPwxokJilpqB0ktNPUsup9CoXMt9EZtggVAtNA1VF4VIYioobndgkQni83h9vr9-rEgUlJqkZogyvlDrosXwHK5SiiatpCDiHAUnLoVFpNPoCZ0iYQSa93nQKX9sADRrJaaC0oy+GVCG5NPtNCpTIZFCoVCjcU56saXPNtKaSoZrv5bpLuoQAOp0SgAJzgjGw3sYgNVIKmGoQxktRUMOlxbjW2m0Tm5JUIxvKJy1jpWbWdhLdAHFsKwwABlMCMVCYSiwf2B5hQYu8QQh5JhhkIJyabJmQxOWFHPh5XTqc16Qi6FbzLWbZrzPzO2jsCBwWT5gitulg+SIfTeCcmNHqYp7419lF7dkaI4nZbaPhwjGGCVBN29MCb9Ud-LZe96Y6uJkk5jmohRuCOSI6Ksz55q6jzPLK5I-Iqn7tuCjImLytQlFctS4to5pFIQdoXPspRIg4TgvvcRCetuapoTu1SFAedojieThnsmtiIKahBeCa-Y6CKP74rBr4hEWJblpWmCofS6ERuUE5NF2ej2uBY4LK04Ezia4ELj4QA */
     context: {
         score: 0,
         cursor: {
@@ -206,15 +197,8 @@ export const swapMachine = setup({
         level: 1,
     },
     id: "Russpack",
-    initial: "Idle",
+    initial: "GameSetup",
     states: {
-        Setup: {
-            on: {
-                start_game: {
-                    target: "Idle",
-                },
-            },
-        },
         Idle: {
             on: {
                 input_move: [
@@ -244,6 +228,7 @@ export const swapMachine = setup({
                 ],
             },
         },
+
         EvaluatingCanva: {
             always: [
                 {
@@ -267,14 +252,22 @@ export const swapMachine = setup({
                 },
             ],
         },
+
         Win: {
             type: "final",
             on: {
                 restart: {
-                    target: "Setup",
+                    target: "GameSetup",
+                    reenter: true
                 },
             },
         },
+
+        GameSetup: {
+            on: {
+                start_game: "Idle"
+            }
+        }
     },
 });
 

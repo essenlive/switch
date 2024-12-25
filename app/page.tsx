@@ -5,6 +5,7 @@ import { swapActor } from "@/lib/swapMachine"
 import { useEffect, useCallback } from 'react'
 import matrixHelpers from '@/lib/matrixHelpers';
 import { cn } from '@/lib/utils';
+import { useToast } from "@/hooks/use-toast"
 
 const BLOCK_COLORS = [
   '',
@@ -16,13 +17,16 @@ const BLOCK_COLORS = [
 const showValues = false;
 const showIndexes = false;
 
-const selectContext = ({context}) => context
+const selectContext = ({ context }) => context
+const selectState = ({value}) => value
 
 
 
 export default function Home() {
   const context = useSelector(swapActor, selectContext);
-  
+  const state = useSelector(swapActor, selectState);
+  const { toast } = useToast()
+
   const handleKeyPress = useCallback((event: KeyboardEvent) => {
     
     switch (event.key) {
@@ -42,6 +46,10 @@ export default function Home() {
         event.preventDefault()
         swapActor.send({ type: 'input_move', direction: 'down' })
         break;
+      case " ":
+        event.preventDefault()
+        swapActor.send({ type: 'start_game', direction: 'down' })
+        break;
       default:
         break;
     }
@@ -52,7 +60,13 @@ export default function Home() {
     return () => { document.removeEventListener('keydown', handleKeyPress); };
   }, [handleKeyPress]);
 
-  
+  useEffect(() => {
+    toast({
+      title: state,
+    })
+    return () => { };
+  }, [state]);
+
   return (
       <div className="flex items-center flex-col-reverse">
 

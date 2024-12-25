@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Score from "@/components/score"
 import "./globals.css";
 import { Nunito } from 'next/font/google'
-
+import { Toaster } from "@/components/ui/toaster"
 
 const nunito = Nunito({
   subsets: ['latin'],
@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={nunito.className}>
       <body className={`antialiased`}>
-
+        <Toaster />
         <div className="min-h-screen bg-gray-100 text-black  p-4 md:p-8">
           <div className="max-w-2xl mx-auto">
             <header className="flex justify-between items-center mb-8">
