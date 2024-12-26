@@ -1,8 +1,7 @@
 import { setup, assign, createActor } from "xstate";
 import matrixHelpers from "@/lib/matrixHelpers"
 
-const initialContext = {
-    score: 0,
+const initialValues = {
     cursor: {
         value: 1,
         x: 0,
@@ -28,7 +27,10 @@ const initialContext = {
 export const swapMachine = setup({
     types: {
         context: {} as {
-            score: number;
+            score: {
+                current: number,
+                best : number | null,
+            };
             cursor: {
                 x: number,
                 y: number,
@@ -127,11 +129,27 @@ export const swapMachine = setup({
         }),
         increment_score: assign(({ context }) => {
             const clonedContext = structuredClone(context);
-            clonedContext.score = clonedContext.score + 1;
+            clonedContext.score.current = clonedContext.score.current + 1;
             return clonedContext;
         }),
-        reset_game: assign(() => {
-            return initialContext;
+        update_best_score: assign(({ context }) => {
+            const clonedContext = structuredClone(context);
+            if (clonedContext.score.best === null) {
+                clonedContext.score.best = clonedContext.score.current;
+            }
+            else if (clonedContext.score.current < clonedContext.score.best){
+                clonedContext.score.best = clonedContext.score.current;
+            }
+            return clonedContext;
+        }),
+
+        reset_game: assign(({context}) => {
+            const clonedContext = structuredClone(context);
+            clonedContext.score.current = 0;
+            clonedContext.canva = initialValues.canva;
+            clonedContext.canvaSize = initialValues.canvaSize;
+            clonedContext.cursor = initialValues.cursor;
+            return clonedContext;
         }),
         resize_canva: assign(({ context }) => {
             const clonedContext = structuredClone(context);
@@ -201,7 +219,16 @@ export const swapMachine = setup({
     },
 }).createMachine({
     /** @xstate-layout N4IgpgJg5mDOIC5SwO4EMAOA6A4mgtmAMpgAuArhgMSyloBOpA+lAWANoAMAuoqBgHtYAS1LCBAOz4gAHogAcAZnlZFnACwA2dQHZNARmXz9+gDQgAnogBMigJxZ1AVkWGd1nfOvX1nRQF9-c1RMLABJCAAbMCphCQxyZnwBADcOHmlBETFJaTkEE2tOVU55JydrfU9NJzNLRDVrLDLXdXtdTTtNaydA4PRsCOjY+MSmZLT2fV4kECzRcSlZ-JMNLG0leTt9bSctcysCnQd1LTtOSp19Tj3Faz6QEMGomLiEpNSOaxn+IQXc5YKZQlLQdQzyYx1Q7GRx2OHw7TdPx2B5PLAAURSaEi5DQYgkUAAwmgJFiqFwfnM-jklqB8rYmpptDdFE4ynYlFUDjZ1PosDo-IZzooDPINKiBhisTi8XEiSSyVNKfMaXlEABaawqfR2Jwc0HaOw+OzchC+ByGLQi-RtNmaPQS0KY7G4-Hy0locnfTLUxZqhCKO5YcpKdrWc6aeSaU2ndT8-VatRG3UooKPSUAdTiVHocDojApPuyfsBCDZOiwgsqNx2ep0ptsJxcbg8Xh8fkdz2GudoDFIhdmKpLdIUNpB2j04MhptZDk0gsUOicOlcnG2gTTEgEEDg0ieRf+tNkGr0WB1evkBvURuvpvVmkrnCfF2XuhXrOcndwbBIFAwB9VUtOgtY4J1sHYOXkBt7CwXVXDufQtXtdx5C-IYwAA4djwKIonErNk9k0NRDBcJwZzZVRmzaQxrgubQv2dGU3WJD1MIBEczQcQj5B0AVFGoqMoRsRdHGbSovF1TZ1C-LMjyHdjsLaJoqyQxMRWsaCVD4xDSgqOxeUXDd-CAA */
-    context: initialContext,
+    context: {
+        score : {
+            current : 0,
+            best : null
+        },
+        cursor: initialValues.cursor,
+        canva: initialValues.canva,
+        canvaSize: initialValues.canvaSize,
+        level: initialValues.level
+    },
     id: "swap",
     initial: "GameSetup",
     states: {
@@ -255,6 +282,7 @@ export const swapMachine = setup({
             always: [
                 {
                     target: "Win",
+                    actions: "update_best_score",
                     guard: {
                         type: "is_win_condition",
                     },
