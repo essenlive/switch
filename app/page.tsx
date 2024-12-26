@@ -6,9 +6,11 @@ import { useEffect, useCallback } from 'react'
 import matrixHelpers from '@/lib/matrixHelpers';
 import { cn } from '@/lib/utils';
 import { useToast } from "@/hooks/use-toast"
+import { useSwipeable } from 'react-swipeable';
+
 
 const BLOCK_COLORS = [
-  '',
+  '', 
   'bg-red-500',
   'bg-blue-500',
   'bg-green-500',
@@ -26,6 +28,17 @@ export default function Home() {
   const context = useSelector(swapActor, selectContext);
   const state = useSelector(swapActor, selectState);
   const { toast } = useToast()
+
+
+  const handlers = useSwipeable({
+    onSwipedLeft: () => swapActor.send({ type: 'input_move', direction: 'left' }),
+    onSwipedRight: () => swapActor.send({ type: 'input_move', direction: 'right' }),
+    onSwipedUp: () => swapActor.send({ type: 'input_move', direction: 'up' }),
+    onSwipedDown: () => swapActor.send({ type: 'input_move', direction: 'down' }),
+    // swipeDuration: 500,
+    preventScrollOnSwipe: true,
+    // trackMouse: true
+  });
 
   const handleKeyPress = useCallback((event: KeyboardEvent) => {
     
@@ -72,7 +85,7 @@ export default function Home() {
   }, [state , toast]);
 
   return (
-      <div className="flex items-center flex-col-reverse">
+    <div className="flex items-center flex-col-reverse" {...handlers}>
 
       {/* Column indexes */}
       {showIndexes && (
