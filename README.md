@@ -1,4 +1,14 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Getting Started
+
+Small game inspired from Russpack. Maybe it is the same, I don't remember the game correctly.
+
+## Stack
+
+This is project uses : 
+ - [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+ - [Xstate](https://stately.ai/docs)to manage the state machine.
+ - [Tailwind CSS](https://tailwindcss.com/) for styling.
+ - [Shadcn](https://ui.shadcn.com/) For the UI components.
 
 ## Getting Started
 
@@ -6,19 +16,14 @@ First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The machine logic is in `app/swapMachine.ts`, you can preview it with the [xstate vscode extension](https://marketplace.visualstudio.com/items?itemName=statelyai.stately-vscode).
+
 
 ## Learn More
 
@@ -34,3 +39,13 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Todo
+
+ - [ ] Swipe gestures
+ - [ ] Session highscore
+ - [ ] LocalStore session
+ - [ ] Add buttons, restart, keys, kbd shortcuts
+ - [ ] Add settings
+ - [ ] Add modes : timers, random, daily
+ 
