@@ -19,8 +19,8 @@ export function StartMenu({
     }
 
     return (
-        <div className={cn("flex flex-col gap-6 absolute", className)} {...props}>
-            <Card>
+        <div className={cn("flex flex-col gap-6 fixed w-screen h-screen items-center justify-center", className)} {...props}>
+            <Card className=" min-w-64">
                 <CardHeader>
                     <CardTitle className="text-2xl">SWAP</CardTitle>
                     <CardDescription>

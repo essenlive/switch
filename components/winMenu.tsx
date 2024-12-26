@@ -24,13 +24,15 @@ export function WinMenu({
     const currentScore = useSelector(swapActor, selectCurrentScore);
     const bestScore = useSelector(swapActor, selectBestScore);
     return (
-        <div className={cn("flex flex-col gap-6 absolute", className)} {...props}>
-            <Card>
+        <div className={cn("flex flex-col gap-6 fixed w-screen h-screen items-center justify-center", className)} {...props}>
+            <Card className=" min-w-64">
                 <CardHeader>
                     <CardTitle className="text-2xl">You Won !</CardTitle>
                     <CardDescription>
-                        Score : {currentScore}
-                        {currentScore <= bestScore && "Nouveau record !" }
+                        <p>
+                            Score : {currentScore}
+                        </p>
+                        {currentScore <= bestScore && (<p className="font-bold">Nouveau record !</p>) }
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
