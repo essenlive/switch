@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Square, Star, Tally5 } from 'lucide-react'
-
+import { Separator } from '@/components/ui/separator';
 import { useSelector } from '@xstate/react';
 import { swapActor } from "@/lib/swapMachine"
 
@@ -17,9 +17,11 @@ const Score: React.FC = () => {
     return (
         <div className="flex items-center">
             <Star className="w-5 h-5 mr-2" />
-            <span className="text-lg md:text-xl font-semibold mr-5">{bestScore}</span>
+            <span className="text-lg md:text-xl font-semibold">{bestScore}</span>
+            <Separator className="border-black mx-3" orientation="vertical" />
             <Tally5 className="w-5 h-5 mr-2" />
-            <span className="text-lg md:text-xl font-semibold mr-5">{currentScore}</span>
+            <span className="text-lg md:text-xl font-semibold">{currentScore}</span>
+            <Separator className="border-black mx-3" orientation="vertical" />
             <Square className="w-5 h-5 mr-2" />
             <span className="text-lg md:text-xl font-semibold">{canvaSize.height * canvaSize.width}</span>
         </div>

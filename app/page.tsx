@@ -5,9 +5,10 @@ import { swapActor } from "@/lib/swapMachine"
 import { useEffect, useCallback } from 'react'
 import matrixHelpers from '@/lib/matrixHelpers';
 import { cn } from '@/lib/utils';
-import { useToast } from "@/hooks/use-toast"
+// import { useToast } from "@/hooks/use-toast"
 import { useSwipeable } from 'react-swipeable';
-
+import { WinMenu } from "@/components/winMenu";
+import { StartMenu } from "@/components/startMenu";
 
 const BLOCK_COLORS = [
   '', 
@@ -27,9 +28,9 @@ const selectState = ({value}) => value
 export default function Home() {
   const context = useSelector(swapActor, selectContext);
   const state = useSelector(swapActor, selectState);
-  const { toast } = useToast()
+  // const { toast } = useToast()
 
-
+  
   const handlers = useSwipeable({
     onSwipedLeft: () => swapActor.send({ type: 'input_move', direction: 'left' }),
     onSwipedRight: () => swapActor.send({ type: 'input_move', direction: 'right' }),
@@ -77,16 +78,17 @@ export default function Home() {
     return () => { document.removeEventListener('keydown', handleKeyPress); };
   }, [handleKeyPress]);
 
-  useEffect(() => {
-    toast({
-      title: state,
-    })
-    return () => { };
-  }, [state , toast]);
+  // useEffect(() => {
+  //   toast({
+  //     title: state,
+  //   })
+  //   return () => { };
+  // }, [state , toast]);
 
   return (
     <div className="flex items-center flex-col-reverse" {...handlers}>
-
+      {state === "GameSetup" && <StartMenu />}
+      {state === "Win" && <WinMenu />}
       {/* Column indexes */}
       {showIndexes && (
         <div key={`hy`} className={`hy flex`}>

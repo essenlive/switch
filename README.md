@@ -42,10 +42,11 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Todo
 
- - [ ] Swipe gestures
- - [ ] Session highscore
- - [ ] LocalStore session
+ - [x] Swipe gestures
+ - [x] Session highscore
+ - [ ] Add interface (start / game / win)
  - [ ] Add buttons, restart, keys, kbd shortcuts
+ - [ ] LocalStore session
  - [ ] Add settings
  - [ ] Add modes : timers, random, daily
  

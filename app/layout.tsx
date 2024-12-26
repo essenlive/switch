@@ -25,14 +25,14 @@ export default function RootLayout({
         <Toaster />
         <div className="min-h-screen bg-gray-100 text-black  p-4 md:p-8">
           <div className="max-w-2xl mx-auto">
-            <header className="flex justify-between items-center mb-8">
+            <header className="flex justify-between items-center mb-8 fixed">
               <h1 className="text-2xl md:text-4xl font-bold">SWAP</h1>
               <div className="flex items-center space-x-4">
                 <Score />
               </div>
             </header>
 
-            <main className="p-2 md:p-8">
+            <main className="p-2 md:p-8 h-full w-full">
                 {children}
             </main>
           </div>
