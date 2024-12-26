@@ -130,7 +130,7 @@ export const swapMachine = setup({
             clonedContext.score = clonedContext.score + 1;
             return clonedContext;
         }),
-        reset_game: assign(({ context }) => {
+        reset_game: assign(() => {
             return initialContext;
         }),
         resize_canva: assign(({ context }) => {

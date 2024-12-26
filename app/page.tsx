@@ -57,7 +57,7 @@ export default function Home() {
       default:
         break;
     }
-  }, []);
+  }, [state]);
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyPress);
@@ -69,7 +69,7 @@ export default function Home() {
       title: state,
     })
     return () => { };
-  }, [state]);
+  }, [state , toast]);
 
   return (
       <div className="flex items-center flex-col-reverse">
