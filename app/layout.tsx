@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={nunito.className}>
       <body className={`antialiased  text-black relative`}>
-        <div className="flex flex-col p-4 space-y-4 justify-start min-h-screen max-w-xl mx-auto bg-gray-100">
+        <div className="flex flex-col p-4 space-y-4 justify-start min-h-dvh max-w-xl mx-auto bg-gray-100">
           <Header />
 
 
