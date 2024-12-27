@@ -9,8 +9,8 @@ const initialValues = {
         y: 0,
     },
     canvaSize: {
-        width: 8,
-        height: 10,
+        width: 6,
+        height: 8,
     }
 };
 

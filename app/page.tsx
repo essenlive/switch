@@ -1,8 +1,19 @@
+'use client'
+
 import Link from "next/link";
 import { Sunrise, CircleArrowRight, Timer, Dices } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Home() {
- 
+
+  const { toast } = useToast()
+  const notAvailable = () => {
+    toast({
+      title: "Mode not available yet",
+      description: "I am working on it, stay tuned !",
+      duration: 5000
+    })
+  }
   return (
     <main className="flex-grow flex flex-col items-stretch justfy-stretch h-full w-full space-y-4">
         <Link href="/daily" className="flex-grow flex flex-col p-4 bg-slate-200 cursor-pointer rounded-lg">
@@ -23,7 +34,7 @@ export default function Home() {
             <CircleArrowRight />
           </div>
         </Link>
-        <Link href="/random" className="flex-grow flex flex-col p-4 bg-slate-200 cursor-not-allowed opacity-65 rounded-lg">
+      <Link onClick={notAvailable} href={"/"} className="flex-grow flex flex-col p-4 bg-slate-200 cursor-not-allowed opacity-65 rounded-lg">
           <div className="py-4">
 
             <Dices size={32} />
@@ -41,7 +52,7 @@ export default function Home() {
             <CircleArrowRight />
           </div>
         </Link>
-        <Link href="/time" className="flex-grow flex flex-col p-4 bg-slate-200 cursor-not-allowed opacity-65 rounded-lg">
+      <Link onClick={notAvailable} href={"/"} className="flex-grow flex flex-col p-4 bg-slate-200 cursor-not-allowed opacity-65 rounded-lg">
           <div className="py-4">
 
             <Timer size={32} />
