@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import Score from "@/components/score"
-import "./globals.css";
+  import "./globals.css";
 import { Nunito } from 'next/font/google'
-import { Toaster } from "@/components/ui/toaster"
+import { Header } from "@/components/header";
 
 const nunito = Nunito({
   subsets: ['latin'],
@@ -10,8 +9,8 @@ const nunito = Nunito({
 })
 
 export const metadata: Metadata = {
-  title: "swap",
-  description: "Swap lines mini game",
+  title: "switch",
+  description: "Switch lines mini game",
 };
 
 export default function RootLayout({
@@ -21,18 +20,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={nunito.className}>
-      <body className={`antialiased  bg-gray-100`}>
-        <Toaster />
-        <div className="min-h-screen max-w-2xl mx-auto text-black">
+      <body className={`antialiased  text-black relative`}>
+        <div className="flex flex-col p-4 space-y-4 justify-start min-h-screen max-w-xl mx-auto bg-gray-100">
+          <Header />
 
-          <header className="flex justify-between w-full max-w-2xl items-center h-24 p-4 fixed">
-              <h1 className="text-2xl md:text-4xl font-bold">SWAP</h1>
-              <div className="flex items-center space-x-4">
-                <Score />
-              </div>
-            </header>
 
-            <main className="pt-24 h-screen w-full flex items-center justify-center flex-col">
+            <main className="flex-grow">
                 {children}
             </main>
         </div>
