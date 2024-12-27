@@ -46,7 +46,12 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
  - [x] Session highscore
  - [x] Add interface (start / game / win)
  - [x] Add buttons, restart, keys, kbd shortcuts
+ - [x] Add mode daily
+ - [ ] Share button
+ - [ ] Add animation
+ - [ ] Check initial grid lines
+ - [ ] Improve mobile controls
  - [ ] LocalStore session
+ - [ ] Add modes : timers, random
  - [ ] Add settings
- - [ ] Add modes : timers, random, daily
  

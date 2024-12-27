@@ -10,15 +10,15 @@ export default function Home() {
 
             <Sunrise size={32} />
           </div>
-          <h2 className="text-xl font-bold">
+          <h2 className="text-2xl font-bold">
             Daily Mode
           </h2>
-          <p className="flex-grow font-normal text-m my-4">
+        <p className="flex-grow text-xl my-4">
             Get a grid that changes everyday. Practice and try to solve the grid with as little moves as possible to improve your high score.  
           </p>
           <div className="flex justify-between items-center">
-            <span className="font-bold">
-              Play daily grid
+            <span className="text-xl font-bold">
+                Play daily grid
             </span>
             <CircleArrowRight />
           </div>
@@ -28,10 +28,10 @@ export default function Home() {
 
             <Dices size={32} />
           </div>
-          <h2 className="text-xl font-bold ">
+          <h2 className="text-2xl font-bold ">
             Random Mode
           </h2>
-          <p className="flex-grow font-normal text-m my-4">
+          <p className="flex-grow text-xl my-4">
             Get a random grid everytime, train yourself to spot the best switches in all the different scenarios. 
           </p>
           <div className="flex justify-between items-center">
@@ -46,14 +46,14 @@ export default function Home() {
 
             <Timer size={32} />
           </div>
-          <h2 className="text-xl font-bold ">
+          <h2 className="text-2xl font-bold ">
             Time challenge Mode
           </h2>
-          <p className="flex-grow font-normal text-m my-4">
+          <p className="flex-grow text-xl my-4">
             Solve the grid before it outgrows you.
           </p>
           <div className="flex justify-between items-center">
-            <span className="font-bold">
+            <span className="font-bold text-xl">
               Play time challenge grid
             </span>
             <CircleArrowRight />

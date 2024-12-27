@@ -13,26 +13,54 @@ const selectContext = ({ context }) => context
 const selectState = ({value}) => value
 
 
+let moveCeiling : number = 0;
+const firstCeiling: number = 150;
+const successiveCeilings: number = 50;
 
 export default function Home() {
   const context = useSelector(switchActor, selectContext);
   const state = useSelector(switchActor, selectState);
 
-  
   const gestureHandlers = useSwipeable({
-    onSwipedLeft: () => switchActor.send({ type: 'input_move', direction: 'left' }),
-    onSwipedRight: () => switchActor.send({ type: 'input_move', direction: 'right' }),
-    onSwipedUp: () => switchActor.send({ type: 'input_move', direction: 'up' }),
-    onSwipedDown: () => switchActor.send({ type: 'input_move', direction: 'down' }),
-    // swipeDuration: 500,
+    onSwiping: (SwipeEventData) => {
+    
+      if (SwipeEventData.first) { moveCeiling = 0 ;}
+      if(
+        SwipeEventData.absX > moveCeiling
+        || SwipeEventData.absY > moveCeiling
+      ){
+        if (SwipeEventData.first) { 
+          moveCeiling = firstCeiling; 
+          console.log(`---> First move : ${moveCeiling} | X : ${SwipeEventData.absX} Y : ${SwipeEventData.absY} `)
+        }
+        else{
+          moveCeiling = moveCeiling + successiveCeilings;
+          console.log(`---> Next move : ${moveCeiling} | X : ${SwipeEventData.absX} Y : ${SwipeEventData.absY} `)
+        }
+        switch(SwipeEventData.dir){
+          case 'Left':
+            switchActor.send({ type: 'input_move', direction: 'left' });
+            break;
+          case 'Right':
+            switchActor.send({ type: 'input_move', direction: 'right' });
+            break;
+          case 'Up':
+            switchActor.send({ type: 'input_move', direction: 'up' });
+            break;
+          case 'Down':
+            switchActor.send({ type: 'input_move', direction: 'down' });
+            break;
+        }
+      }
+
+    },
+    swipeDuration: 500,
     preventScrollOnSwipe: true,
     // trackMouse: true
   });
   const restartGame = () => switchActor.send({ type: 'restart_game', direction: 'down' })
 
-
   const handleKeyPress = useCallback((event: KeyboardEvent) => {
-    
     switch (event.key) {
       case "ArrowLeft":
         event.preventDefault()
