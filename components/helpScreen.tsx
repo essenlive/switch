@@ -11,7 +11,7 @@ export function HelpScreen({
     closeHelp: () => void
  }) {
     return (
-        <div onClick={closeHelp} className={cn("absolute top-0 left-0 !my-0 min-h-dvh max-w-xl mx-auto space-y-4 bg-gray-100", className)} {...props}>   
+        <div onClick={closeHelp} className={cn("fixed z-10 top-0 left-0 !my-0 w-full space-y-4 bg-gray-100", className)} {...props}>   
             <div className={"p-4 flex flex-col items-stretch justify-stretch min-h-dvh max-w-xl mx-auto space-y-4"}>   
                 <div className="flex-grow flex flex-col p-4 bg-slate-200 cursor-pointer rounded-lg">
                     <div className="py-4">
