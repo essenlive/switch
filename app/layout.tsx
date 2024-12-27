@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-  import "./globals.css";
+import "./globals.css";
 import { Nunito } from 'next/font/google'
 import { Header } from "@/components/header";
 
@@ -18,19 +18,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+
   return (
     <html lang="en" className={nunito.className}>
-      <body className={`antialiased  text-black relative`}>
-        <div className="flex flex-col p-4 space-y-4 justify-start min-h-dvh max-w-xl mx-auto bg-gray-100">
+      <body className={`antialiased  text-black relative flex flex-col p-4 space-y-4 justify-start min-h-dvh max-w-xl mx-auto bg-gray-100`}>
           <Header />
-
-
-            <main className="flex-grow flex flex-col">
-                {children}
-            </main>
-          </div>
-
-
+          { children }
       </body>
     </html>
   );

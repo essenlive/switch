@@ -66,8 +66,8 @@ export default function Home() {
 
 
   return (
-    <div className="flex-grow flex flex-col items-stretch justify-stretch h-full w-full space-y-4">
-    <>
+    <main className="flex-grow flex flex-col items-stretch justify-stretch h-full w-full space-y-4">
+      <>
     
       <div className="flex flex-grow p-4 bg-slate-200 rounded-lg"  {...gestureHandlers}>
       {
@@ -91,7 +91,7 @@ export default function Home() {
         score={context.score}
       />
     </>
-    </div>
+    </main>
 
 
   );
