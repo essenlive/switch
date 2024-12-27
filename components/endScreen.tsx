@@ -1,5 +1,8 @@
 import { cn } from "@/lib/utils"
-import { CircleArrowRight, PartyPopper, Trophy, Medal } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Share2, CircleArrowRight, PartyPopper, Trophy, Medal } from "lucide-react"
+
+
 
 export function EndScreen({
     className,
@@ -7,8 +10,9 @@ export function EndScreen({
     restart,
     ...props
 }) {
+    const date = new Date();
     return (
-        <div onClick={restart} className={cn("flex flex-col p-4 gap-4 bg-slate-200 rounded-lg cursor-pointer", className)} {...props}>            
+        <div className={cn("flex flex-col relative p-4 gap-4 bg-slate-200 rounded-lg cursor-pointer", className)} {...props}>            
             {score.best === null ? (<>
                 <>
                     <div className="py-4">
@@ -50,12 +54,19 @@ export function EndScreen({
             </>)}
 
         </>)}
-        <div className="flex justify-between items-center">
+
+        <div onClick={restart} className="flex justify-between items-center">
             <span className="font-bold text-xl">
                 Play again
             </span>
             <CircleArrowRight />
         </div>
+
+            <div onClick={() => { navigator.clipboard.writeText(`I solved switch ${date.getDate() + 1}/${date.getMonth()+1} in ${score.current} moves. Try yourself ! https://switch.essenlive.xyz`) }} className="absolute z-10 top-4 right-4">
+                <Button >
+                    <Share2 /> Share
+                </Button>
+            </div>
     </div>
  
     )
