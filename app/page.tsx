@@ -1,59 +1,59 @@
 import Link from "next/link";
-import { Sunrise, CircleArrowRight } from "lucide-react";
+import { Sunrise, CircleArrowRight, Timer, Dices } from "lucide-react";
 
 export default function Home() {
  
   return (
     <div className="flex flex-col items-stretch justi fy-stretch h-full w-full space-y-4">
-      <Link href="/daily" className="flex-grow flex flex-col p-4 bg-slate-200 rounded-lg">
+      <Link href="/daily" className="flex-grow flex flex-col p-4 bg-slate-200 cursor-pointer rounded-lg">
         <div className="py-4">
 
           <Sunrise size={32} />
         </div>
-        <h2 className="text-xl ">
+        <h2 className="text-xl font-bold">
           Daily Mode
         </h2>
         <p className="flex-grow font-normal text-m my-4">
-          Veniam mollit pariatur elit ad adipisicing id elit sunt veniam duis. Nisi anim sunt laboris ut laboris. Ad veniam magna in occaecat minim. Elit amet eu adipisicing reprehenderit cillum officia nostrud ex eiusmod. 
+          Get a grid that changes everyday. Practice and try to solve the grid with as little moves as possible to improve your high score.  
         </p>
         <div className="flex justify-between items-center">
-          <span>
+          <span className="font-bold">
             Play daily grid
           </span>
           <CircleArrowRight />
         </div>
       </Link>
-      <Link href="/random" className="flex-grow flex flex-col p-4 bg-slate-200 rounded-lg">
+      <Link href="/random" className="flex-grow flex flex-col p-4 bg-slate-200 cursor-not-allowed opacity-65 rounded-lg">
         <div className="py-4">
 
-          <Sunrise size={32} />
+          <Dices size={32} />
         </div>
-        <h2 className="text-xl ">
+        <h2 className="text-xl font-bold ">
           Random Mode
         </h2>
         <p className="flex-grow font-normal text-m my-4">
-          Veniam mollit pariatur elit ad adipisicing id elit sunt veniam duis. Nisi anim sunt laboris ut laboris. Ad veniam magna in occaecat minim. Elit amet eu adipisicing reprehenderit cillum officia nostrud ex eiusmod.
+          Get a random grid everytime, train yourself to spot the best switches in all the different scenarios. 
         </p>
         <div className="flex justify-between items-center">
-          <span>
+          <span className="font-bold">
             Play random grid
           </span>
           <CircleArrowRight />
         </div>
       </Link>
-      <Link href="/time" className="flex-grow flex flex-col p-4 bg-slate-200 rounded-lg">
+      <Link href="/time" className="flex-grow flex flex-col p-4 bg-slate-200 cursor-not-allowed opacity-65 rounded-lg">
         <div className="py-4">
 
-          <Sunrise size={32} />
+          <Timer size={32} />
         </div>
-        <h2 className="text-xl ">
+        <h2 className="text-xl font-bold ">
           Time challenge Mode
         </h2>
         <p className="flex-grow font-normal text-m my-4">
-          Veniam mollit pariatur elit ad adipisicing id elit sunt veniam duis. Nisi anim sunt laboris ut laboris. Ad veniam magna in occaecat minim. Elit amet eu adipisicing reprehenderit cillum officia nostrud ex eiusmod.
+          Solve the grid before it outgrows you.
         </p>
         <div className="flex justify-between items-center">
-          <span>
+          <span className="font-bold">
             Play time challenge grid
           </span>
           <CircleArrowRight />

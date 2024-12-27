@@ -26,7 +26,7 @@ const initialValues = {
     level: 1,
 };
 
-export const swapMachine = setup({
+export const switchMachine = setup({
     types: {
         context: {} as {
             score: {
@@ -51,7 +51,7 @@ export const swapMachine = setup({
                 direction: "up" | "down" | "left" | "right"
              }
             | {
-                type: "restart",
+                type: "restart_game",
                 direction: "up" | "down" | "left" | "right"
             }
             | {
@@ -220,7 +220,7 @@ export const swapMachine = setup({
         },
     },
 }).createMachine({
-    /** @xstate-layout N4IgpgJg5mDOIC5SwO4EMAOA6A4mgtmAMpgAuArhgMSyloBOpA+lAWANoAMAuoqBgHtYAS1LCBAOz4gAHogAcAZnlZFnACwA2dQHZNARmXz9+gDQgAnogBMigJxZ1AVkWGd1nfOvX1nRQF9-c1RMLABJCAAbMCphCQxyZnwBADcOHmlBETFJaTkEE2tOVU55JydrfU9NJzNLRDVrLDLXdXtdTTtNaydA4PRsCOjY+MSmZLT2fV4kECzRcSlZ-JMNLG0leTt9bSctcysCnQd1LTtOSp19Tj3Faz6QEMGomLiEpNSOaxn+IQXc5YKZQlLQdQzyYx1Q7GRx2OHw7TdPx2B5PLAAURSaEi5DQYgkUAAwmgJFiqFwfnM-jklqB8rYmpptDdFE4ynYlFUDjZ1PosDo-IZzooDPINKiBhisTi8XEiSSyVNKfMaXlEABaawqfR2Jwc0HaOw+OzchC+ByGLQi-RtNmaPQS0KY7G4-Hy0locnfTLUxZqhCKO5YcpKdrWc6aeSaU2ndT8-VatRG3UooKPSUAdTiVHocDojApPuyfsBCDZOiwgsqNx2ep0ptsJxcbg8Xh8fkdz2GudoDFIhdmKpLdIUNpB2j04MhptZDk0gsUOicOlcnG2gTTEgEEDg0ieRf+tNkGr0WB1evkBvURuvpvVmkrnCfF2XuhXrOcndwbBIFAwB9VUtOgtY4J1sHYOXkBt7CwXVXDufQtXtdx5C-IYwAA4djwKIonErNk9k0NRDBcJwZzZVRmzaQxrgubQv2dGU3WJD1MIBEczQcQj5B0AVFGoqMoRsRdHGbSovF1TZ1C-LMjyHdjsLaJoqyQxMRWsaCVD4xDSgqOxeUXDd-CAA */
+    /** @xstate-layout N4IgpgJg5mDOIC5SwO4EsAuBjAFgOgHEBDAWzAH0BlMDAVwAcBiAbQAYBdRUege1kzQ8AdlxAAPRACYAzAE48ARgUB2BQA5lAVgA0IAJ6IF05QF8Tu1JlyFSFAJIQANmEZoh9WhnIkeANzBsnEggvPwYgiLBEgiSkpp4rMqs0gpxugYxACzSeHFmFujY+MRk5A7Oru6e3n4BCkHcfALCotGx8YnJqTr6iNKs8Vr5IJZFNqXlLm4eXj7+zJINIU3hLVFScQlJKWm9CJmZknhD5iOF1iX2Ti4ATnAYRDcYgaKhzZGgbZudOz0Zmsp5CcClZirZyABhIhCXxEcgAUVhjloRFWQhYHFeKwirT6Kjwmlkxj+iABQM0w1GF3BUJhcMRRGRqIiLHqWLCOPWCBSygJRK06UQADZjMcKacqWDSrTYQikSi0SxFuz3rjufjCcTBQhlIcCZTzjhGHdYA8nngoLYXsE3mi1QBaSS6vCyIWZIWsWRezQKd1C7WSbK5TLe2SHYxCoVqSRmU5CHgQOCiSUqu1c+3SWIut0er2yH1+7UhgmsUusVKxSRqWSmCWG8YUah0eipzmfRCsAOZVgG0ENsrXVtrdsITt7YyZfV1vuXSHQ2UMplpxoc4fiDvazSe3tjWfwoQQIcfdej7VunLisxAA */
     context: {
         score : {
             current : 0,
@@ -231,32 +231,32 @@ export const swapMachine = setup({
         canvaSize: initialValues.canvaSize,
         level: initialValues.level
     },
-    id: "swap",
-    initial: "GameSetup",
+
+    id: "switch",
+    initial: "Game_Setup",
+
     states: {
-        GameSetup: {
-            on: {
-                start_game: [
-                    {
-                        target: "Idle",
-                        actions: [
-                            { type: "reset_game" }
-                        ],
-                    }
-                ]
-            },
+        "Game_Setup": {
+            always: 
+                {
+                target: "Game_Idle",
+                    actions: [
+                        { type: "reset_game" }
+                    ],
+                }
+                
         },
-        Idle: {
+        "Game_Idle": {
             on: {
                 input_move: [
                     {
-                        target: "Idle",
+                        target: "Game_Idle",
                         guard: {
                             type: "is_invalid_move",
                         },
                     },
                     {
-                        target: "Idle",
+                        target: "Game_Idle",
                         actions: [
                             { type: "move_cursor"},
                             { type: "increment_score"}
@@ -266,7 +266,7 @@ export const swapMachine = setup({
                         },
                     },
                     {
-                        target: "EvaluatingCanva",
+                        target: "Game_Canva_Evaluation",
                         actions: [
                             { type: "shift_canva" },
                             { type: "increment_score" }
@@ -274,23 +274,22 @@ export const swapMachine = setup({
                     },
                 ],
                 restart: {
-                    target: "GameSetup",
+                    target: "Game_Setup",
                     reenter: true
                 },
             },
         },
 
-        EvaluatingCanva: {
+        "Game_Canva_Evaluation": {
             always: [
                 {
-                    target: "Win",
-                    actions: "update_best_score",
+                    target: "Game_End",
                     guard: {
                         type: "is_win_condition",
                     },
                 },
                 {
-                    target: "EvaluatingCanva",
+                    target: "Game_Canva_Evaluation",
                     actions: {
                         type: "resize_canva",
                     },
@@ -300,22 +299,19 @@ export const swapMachine = setup({
                     reenter: true,
                 },
                 {
-                    target: "Idle",
+                    target: "Game_Idle",
                 },
             ],
         },
 
-        Win: {
-            on: {
-                restart: {
-                    target: "GameSetup",
-                    reenter: true
-                },
-            },
-        },
+        "Game_End": {},
 
     },
+
+    on: {
+        "restart_game": ".Game_Setup"
+    }
 });
 
-export const swapActor = createActor(swapMachine);
-swapActor.start();
+export const switchActor = createActor(switchMachine);
+switchActor.start();

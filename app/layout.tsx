@@ -25,10 +25,10 @@ export default function RootLayout({
           <Header />
 
 
-            <main className="flex-grow">
+            <main className="flex-grow flex flex-col">
                 {children}
             </main>
-        </div>
+          </div>
 
 
       </body>
