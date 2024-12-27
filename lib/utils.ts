@@ -8,14 +8,14 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // Turn string to hash number
-function hashStringToSeed(str: string): number {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    hash = (hash << 5) - hash + str.charCodeAt(i);
-    hash |= 0; // Convert to 32bit integer
-  }
-  return hash;
-}
+// function hashStringToSeed(str: string): number {
+//   let hash = 0;
+//   for (let i = 0; i < str.length; i++) {
+//     hash = (hash << 5) - hash + str.charCodeAt(i);
+//     hash |= 0; // Convert to 32bit integer
+//   }
+//   return hash;
+// }
 
 // Get string from daily date
 export function getDailyString(): string {
@@ -30,7 +30,7 @@ export function getDailyString(): string {
 // Generate random array from seed number !! This is not good code !! 
 export function generateRandomArray(str: string, rows: number, cols: number): number[][] {
   // const seed = hashStringToSeed(str);
-  let rng = new Prando(str);
+  const rng = new Prando(str);
   const randomArray: number[][] = [];
   for (let i = 0; i < rows; i++) {
     const row: number[] = [];
@@ -43,6 +43,6 @@ export function generateRandomArray(str: string, rows: number, cols: number): nu
 
   // Check for lines and reset
 
-  
+
   return randomArray;
 }

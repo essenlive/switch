@@ -85,7 +85,7 @@ export default function Home() {
       default:
         break;
     }
-  }, [state]);
+  }, []);
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyPress);
