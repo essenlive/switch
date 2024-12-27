@@ -11,9 +11,9 @@ export function Score({
 
     return (
         <div className={cn("flex space-x-4 w-full", className)} {...props}>
-            <div className="flex-grow flex  items-center p-3 font-bold bg-slate-200 rounded-lg">
+            <div className="flex-grow flex  items-center p-3 bg-slate-200 rounded-lg">
                 <MoveHorizontal />
-                <span className="ml-4 text-xl">
+                <span className="ml-4 text-xl font-bold">
                     {score.current}
                 </span>
             </div>
@@ -21,8 +21,8 @@ export function Score({
                 <RotateCcw />
             </div>
             <div className="flex-grow flex justify-end items-center p-3 bg-slate-200 rounded-lg">
-                <span className="mr-4 text-xl">
-                    {score.best === null && "-"}
+                <span className="mr-4 text-xl font-bold">
+                    {score.best === null ? "-" : score.best}
                 </span>
                 <Trophy />
             </div>

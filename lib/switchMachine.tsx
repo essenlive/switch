@@ -135,6 +135,7 @@ export const switchMachine = setup({
             return clonedContext;
         }),
         update_best_score: assign(({ context }) => {
+            
             const clonedContext = structuredClone(context);
             if (clonedContext.score.best === null) {
                 clonedContext.score.best = clonedContext.score.current;
@@ -142,6 +143,7 @@ export const switchMachine = setup({
             else if (clonedContext.score.current < clonedContext.score.best){
                 clonedContext.score.best = clonedContext.score.current;
             }
+
             return clonedContext;
         }),
 
@@ -304,7 +306,11 @@ export const switchMachine = setup({
             ],
         },
 
-        "Game_End": {},
+        "Game_End": {
+            exit: {
+                type: "update_best_score",
+            },
+        },
 
     },
 

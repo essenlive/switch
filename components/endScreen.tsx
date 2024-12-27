@@ -8,7 +8,7 @@ export function EndScreen({
     ...props
 }) {
     return (
-        <div className={cn("flex flex-col p-4 gap-4 bg-slate-200 rounded-lg cursor-pointer", className)} {...props}>            
+        <div onClick={restart} className={cn("flex flex-col p-4 gap-4 bg-slate-200 rounded-lg cursor-pointer", className)} {...props}>            
             {score.best === null ? (<>
                 <>
                     <div className="py-4">
@@ -50,7 +50,7 @@ export function EndScreen({
             </>)}
 
         </>)}
-        <div onClick={restart} className="flex justify-between items-center">
+        <div className="flex justify-between items-center">
             <span className="font-bold">
                 Play again
             </span>
