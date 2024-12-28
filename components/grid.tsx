@@ -15,7 +15,7 @@ const BLOCK_VALUES = [
     '🟩',
     '🟡',
 ];
-const showValues = true;
+const showValues = false;
 
 
 export function Grid({
