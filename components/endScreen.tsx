@@ -13,7 +13,7 @@ export function EndScreen({
     const { toast } = useToast()
     const copyToClipboard = () => {
         const date = new Date();
-        navigator.clipboard.writeText(`I solved switch ${date.getDate() + 1}/${date.getMonth()+1} in ${score.current} moves. Try yourself ! https://switch.essenlive.xyz`)
+        navigator.clipboard.writeText(`I solved switch ${date.getDate() + 1}/${date.getMonth()+1} in ${score.best} moves. Try yourself ! https://switch.essenlive.xyz`)
         toast({
             title: "Copied to clipboard",
             description: "You can now share your score with your friends",
@@ -28,7 +28,7 @@ export function EndScreen({
             <div className={cn("flex-grow relative flex flex-col p-4 bg-slate-200 rounded-lg", className)} {...props}>
                 <div onClick={copyToClipboard} className="absolute z-10 top-4 right-4">
                     <Button className="text-xl p-4" >
-                        <Share2 /> Share
+                        <Share2 /> Share best
                     </Button>
                 </div>         
             {score.best === null ? (
