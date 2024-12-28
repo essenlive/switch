@@ -34,7 +34,7 @@ export default function Home() {
             <CircleArrowRight />
           </div>
         </Link>
-      <Link onClick={notAvailable} href={"/"} className="flex-grow flex flex-col p-4 bg-slate-200 cursor-not-allowed opacity-65 rounded-lg">
+      <Link onClick={notAvailable} href={"/"} className="flex-grow flex flex-col p-4 bg-slate-200 cursor-not-allowed opacity-30 rounded-lg">
           <div className="py-4">
 
             <Dices size={32} />
@@ -52,7 +52,7 @@ export default function Home() {
             <CircleArrowRight />
           </div>
       </Link>
-      <Link onClick={notAvailable} href={"/"} className="flex-grow flex flex-col p-4 bg-slate-200 cursor-not-allowed opacity-65 rounded-lg">
+      <Link onClick={notAvailable} href={"/"} className="flex-grow flex flex-col p-4 bg-slate-200 cursor-not-allowed opacity-30 rounded-lg">
         <div className="py-4">
 
           <Timer size={32} />
@@ -70,7 +70,7 @@ export default function Home() {
           <CircleArrowRight />
         </div>
       </Link>
-      <Link onClick={notAvailable} href={"/"} className="flex-grow flex flex-col p-4 bg-slate-200 cursor-not-allowed opacity-65 rounded-lg">
+      <Link onClick={notAvailable} href={"/"} className="flex-grow flex flex-col p-4 bg-slate-200 cursor-not-allowed opacity-30 rounded-lg">
         <div className="py-4">
 
           <Settings size={32} />
