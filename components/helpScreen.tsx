@@ -1,17 +1,31 @@
 import { cn } from "@/lib/utils"
 import { Move, BookText, MessageCircleQuestion, SquareArrowOutUpRight, CircleX } from "lucide-react"
 import Link from "next/link"
+import { motion, AnimatePresence } from "motion/react"
 
 export function HelpScreen({
     className,
+    visible,
     closeHelp,
     ...props
 }:{ 
+
     className?: string,
+    visible: boolean,
     closeHelp: () => void
  }) {
+    console.log(visible);
+    
     return (
-        <div className={cn("absolute z-10 top-0 left-0 !my-0 h-full w-full space-y-4 bg-gray-100", className)} {...props}>   
+<AnimatePresence>
+  {visible && (
+            <motion.div 
+                    key="helpScreen"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0 }}
+                    transition={{ duration: 0.3, ease: "linear" }}
+            className={cn("absolute z-10 top-0 left-0 !my-0 h-full w-full space-y-4 bg-gray-100", className)} {...props}>   
             <div className={"p-4 flex flex-col items-stretch justify-stretch min-h-dvh max-w-xl mx-auto space-y-4"}>   
                 <div className="flex-grow flex flex-col p-8 bg-slate-200 rounded-lg">
                     <div className="py-4">
@@ -97,12 +111,12 @@ export function HelpScreen({
                         <li>The game logic is made with <Link className="underline" href="https://stately.ai">xstate</Link>.</li>
                     </ol>
                 </div>
-        </div>
-    
-        <div onClick={closeHelp}  className="fixed z-10 p-4 top-0 right-4 cursor-pointer">
-            <CircleX size={32} />
             </div>
-        </div>
-
+    
+                <motion.div whileHover={{ scale: 1.1 }} onClick={closeHelp}  className="fixed z-10 p-4 top-0 right-4 cursor-pointer">
+                    <CircleX size={32} />
+                </motion.div>
+        </motion.div>)}
+        </AnimatePresence>
     )
 }

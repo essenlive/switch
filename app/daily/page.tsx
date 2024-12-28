@@ -96,21 +96,20 @@ export default function Home() {
   return (
     <main className="flex-grow flex flex-col items-stretch justify-stretch h-full w-full space-y-4">
       
-      {
-        state === "Game_End" ? 
         <EndScreen
-          className={""} 
+          className={""}
+          visible={state === "Game_End"}
           restart={restartGame}
           score={context.score}
         />
-        : 
+      { state !== "Game_End" && 
         <div className="flex flex-grow p-4 bg-slate-200 rounded-lg"  {...gestureHandlers}>
-        <Grid 
-          className={""}
-          canva={context.canva}
-          cursor={context.cursor}
-        />
-      </div>
+          <Grid 
+            className={""}
+            canva={context.canva}
+            cursor={context.cursor}
+          />
+        </div>
       }
       <Score
         className={""}

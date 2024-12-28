@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils"
 import { RotateCcw, Trophy, MoveHorizontal } from "lucide-react";
-
+import { motion } from "motion/react";
 export function Score({
     className,
     score,
@@ -17,9 +17,9 @@ export function Score({
                     {score.current}
                 </span>
             </div>
-            <div className="flex justify-center items-center p-3 aspect-square cursor-pointer bg-slate-200 rounded-lg" onClick={restart}>
+            <motion.div whileHover={{ scale: 1.1 }} className="flex justify-center items-center p-3 aspect-square cursor-pointer bg-slate-200 rounded-lg" onClick={restart}>
                 <RotateCcw />
-            </div>
+            </motion.div>
             <div className="flex-grow flex justify-end items-center p-3 bg-slate-200 rounded-lg">
                 <span className="mr-4 text-xl font-bold">
                     {score.best === null ? "-" : score.best}

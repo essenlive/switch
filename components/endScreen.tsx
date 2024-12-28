@@ -2,10 +2,12 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Share2, CircleArrowRight, PartyPopper, Trophy, Medal } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { motion, AnimatePresence} from "motion/react"
 
 
 export function EndScreen({
     className,
+    visible,
     score,
     restart,
     ...props
@@ -13,7 +15,7 @@ export function EndScreen({
     const { toast } = useToast()
     const copyToClipboard = () => {
         const date = new Date();
-        navigator.clipboard.writeText(`I solved switch ${date.getDate() + 1}/${date.getMonth()+1} in ${score.best} moves. Try yourself ! https://switch.essenlive.xyz`)
+        navigator.clipboard.writeText(`I solved switch ${date.getDate() + 1}/${date.getMonth() + 1} in ${score.best < score.current ? score.best : score.current} moves. Try yourself ! https://switch.essenlive.xyz`)
         toast({
             title: "Copied to clipboard",
             description: "You can now share your score with your friends",
@@ -22,15 +24,24 @@ export function EndScreen({
 
 
     return (
-        <div className={cn("flex-grow flex flex-col gap-4", className)} {...props}>
+        <AnimatePresence>
+
+        { visible && (
+        <motion.div 
+            key="endScreen"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, position: "absolute" }}
+            transition={{ duration: 0.1, ease: "linear" }}
+            className={cn("flex-grow flex flex-col gap-4", className)} {...props}>
 
     
             <div className={cn("flex-grow relative flex flex-col p-4 bg-slate-200 rounded-lg", className)} {...props}>
-                <div onClick={copyToClipboard} className="absolute z-10 top-4 right-4">
+                <motion.div whileHover={{ scale: 1.1 }} onClick={copyToClipboard} className="absolute z-10 top-4 right-4">
                     <Button className="text-xl p-4" >
                         <Share2 /> Share best
                     </Button>
-                </div>         
+                </motion.div>         
             {score.best === null ? (
                 <>
                     <div className="py-4">
@@ -74,13 +85,14 @@ export function EndScreen({
         </>)}
         </div>
 
-            <div onClick={restart} className="flex justify-between items-center p-4 bg-slate-200 rounded-lg cursor-pointer">
+            <motion.div whileHover={{ scale: 1.05 }} onClick={restart} className="flex justify-between items-center p-4 bg-slate-200 rounded-lg cursor-pointer">
             <span className="font-bold text-xl">
                 Play again
             </span>
             <CircleArrowRight />
-        </div>
-    </div>
+        </motion.div>
+    </motion.div>)}
+    </AnimatePresence>
 
     )
 }
