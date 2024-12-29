@@ -14,16 +14,15 @@ export function HelpScreen({
     visible: boolean,
     closeHelp: () => void
  }) {
-    console.log(visible);
     
     return (
 <AnimatePresence>
   {visible && (
             <motion.div 
                     key="helpScreen"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    exit={{ scale: 0 }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
                     transition={{ duration: 0.3, ease: "linear" }}
             className={cn("absolute z-10 top-0 left-0 !my-0 h-full w-full space-y-4 bg-gray-100", className)} {...props}>   
             <div className={"p-4 flex flex-col items-stretch justify-stretch min-h-dvh max-w-xl mx-auto space-y-4"}>   

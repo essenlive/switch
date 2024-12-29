@@ -3,6 +3,7 @@ import "./globals.css";
 import { Nunito } from 'next/font/google'
 import { Header } from "@/components/header";
 import { Toaster } from "@/components/ui/toaster"
+import { Suspense } from 'react'
 
 const nunito = Nunito({
   subsets: ['latin'],
@@ -26,7 +27,10 @@ export default function RootLayout({
       
       <body className={`antialiased  text-black relative flex flex-col p-4 space-y-4 justify-start min-h-dvh max-w-xl mx-auto bg-gray-100`}>
           <Header />
-          { children }
+          <Suspense>
+            { children }
+
+          </Suspense>
           <Toaster />
       </body>
     </html>

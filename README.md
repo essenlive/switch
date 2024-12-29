@@ -47,11 +47,11 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
  - [x] Add interface (start / game / win)
  - [x] Add buttons, restart, keys, kbd shortcuts
  - [x] Add mode daily
- - [ ] Share button
- - [ ] Add animation
+ - [x] Share button
+ - [x] Improve mobile controls
  - [ ] Check initial grid lines
- - [ ] Improve mobile controls
- - [ ] LocalStore session
  - [ ] Add modes : timers, random
  - [ ] Add settings
+ - [ ] LocalStore session
+ - [-] Add animation
  

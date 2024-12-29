@@ -1,20 +1,17 @@
-import { setup, assign, createActor } from "xstate";
-import matrixHelpers from "@/lib/matrixHelpers"
-import { getDailyString, generateRandomArray } from "@/lib/utils";
+import { setup, assign } from "xstate";
+import { 
+    checkValues,
+    removeColumn, 
+    removeRow, 
+    addToColumnEnd, 
+    addToColumnStart, 
+    addToRowEnd, 
+    addToRowStart
+} from "@/lib/matrixHelpers"
 
-const initialValues = {
-    cursor: {
-        value: 1,
-        x: 0,
-        y: 0,
-    },
-    canvaSize: {
-        width: 6,
-        height: 8,
-    }
-};
 
-export const switchMachine = setup({
+
+const switchMachine = setup({
     types: {
         context: {} as {
             score: {
@@ -27,10 +24,12 @@ export const switchMachine = setup({
                 value: number
             };
             canva: number[][];
-            canvaSize: {
-                height: number,
-                width: number
-            };
+            initialCanva: number[][];
+
+        },
+        input: {} as {
+            canva: number[][],
+            timerMode: boolean,
         },
         events: {} as
             | { 
@@ -80,7 +79,7 @@ export const switchMachine = setup({
             };
             switch (event.direction) {
                 case "down":
-                    newData = matrixHelpers.addToColumnEnd(
+                    newData = addToColumnEnd(
                         clonedContext.canva,
                         clonedContext.cursor.x - 1,
                         clonedContext.cursor.value,
@@ -88,15 +87,15 @@ export const switchMachine = setup({
                     clonedContext.cursor.y = 0;
                     break;
                 case "up":
-                    newData = matrixHelpers.addToColumnStart(
+                    newData = addToColumnStart(
                         clonedContext.canva,
                         clonedContext.cursor.x - 1,
                         clonedContext.cursor.value,
                     );
-                    clonedContext.cursor.y = clonedContext.canvaSize.height + 1;
+                    clonedContext.cursor.y = clonedContext.canva.length + 1;
                     break;
                 case "left":
-                    newData = matrixHelpers.addToRowEnd(
+                    newData = addToRowEnd(
                         clonedContext.canva,
                         clonedContext.cursor.y - 1,
                         clonedContext.cursor.value,
@@ -104,12 +103,12 @@ export const switchMachine = setup({
                     clonedContext.cursor.x = 0;
                     break;
                 case "right":
-                    newData = matrixHelpers.addToRowStart(
+                    newData = addToRowStart(
                         clonedContext.canva,
                         clonedContext.cursor.y - 1,
                         clonedContext.cursor.value,
                     );
-                    clonedContext.cursor.x = clonedContext.canvaSize.width + 1;
+                    clonedContext.cursor.x = clonedContext.canva[0].length + 1;
                     break;
             }
             clonedContext.canva = newData.canva;
@@ -137,28 +136,25 @@ export const switchMachine = setup({
         reset_game: assign(({context}) => {
             const clonedContext = structuredClone(context);
             clonedContext.score.current = 0;
-            clonedContext.canva = generateRandomArray(getDailyString(), initialValues.canvaSize.height, initialValues.canvaSize.width );
-            clonedContext.canvaSize = initialValues.canvaSize;
-            clonedContext.cursor = initialValues.cursor;
+            clonedContext.canva =context.initialCanva;
+            clonedContext.cursor ={ x: 0, y: 0, value: 1 }
             return clonedContext;
         }),
         resize_canva: assign(({ context }) => {
             const clonedContext = structuredClone(context);
-            const { rows, columns } = matrixHelpers.checkValues(clonedContext.canva);
+            const { rows, columns } = checkValues(clonedContext.canva);
             if (rows.length > 0) {
-                clonedContext.canva = matrixHelpers.removeRow(
+                clonedContext.canva = removeRow(
                     clonedContext.canva,
                     rows[0],
                 );
-                clonedContext.canvaSize.height = clonedContext.canvaSize.height - 1;
                 clonedContext.cursor.y =
-                    clonedContext.cursor.y === 0 ? 0 : clonedContext.cursor.y - 1;
+                clonedContext.cursor.y === 0 ? 0 : clonedContext.cursor.y - 1;
             } else if (columns.length > 0) {
-                clonedContext.canva = matrixHelpers.removeColumn(
+                clonedContext.canva = removeColumn(
                     clonedContext.canva,
                     columns[0],
                 );
-                clonedContext.canvaSize.width = clonedContext.canvaSize.width - 1;
                 clonedContext.cursor.x =
                 clonedContext.cursor.x === 0 ? 0 : clonedContext.cursor.x - 1;
             }
@@ -170,11 +166,9 @@ export const switchMachine = setup({
             // Check for invalid movements
             if (
                 (context.cursor.y <= 0 && event.direction === "down") ||
-                (context.cursor.y >= context.canvaSize.height + 1 &&
-                    event.direction === "up") ||
+                (context.cursor.y >= context.canva.length + 1 && event.direction === "up") ||
                 (context.cursor.x <= 0 && event.direction === "left") ||
-                (context.cursor.x >= context.canvaSize.width + 1 &&
-                    event.direction === "right")
+                (context.cursor.x >= context.canva[0].length + 1 && event.direction === "right")
             ) {
                 return true;
             }
@@ -183,12 +177,8 @@ export const switchMachine = setup({
         is_cursor_move: ({ context, event }) => {
             // Check for simple movements
             if (
-                ((context.cursor.y === 0 ||
-                    context.cursor.y === context.canvaSize.height + 1) &&
-                    (event.direction === "left" || event.direction === "right")) ||
-                ((context.cursor.x === 0 ||
-                    context.cursor.x === context.canvaSize.width + 1) &&
-                    (event.direction === "up" || event.direction === "down"))
+                ((context.cursor.y === 0 || context.cursor.y === context.canva.length + 1) && (event.direction === "left" || event.direction === "right")) ||
+                ((context.cursor.x === 0 || context.cursor.x === context.canva[0].length + 1) && (event.direction === "up" || event.direction === "down"))
             ) {
                 return true;
             }
@@ -201,7 +191,7 @@ export const switchMachine = setup({
             return false;
         },
         is_full_line: ({ context }) => {
-            const { rows, columns } = matrixHelpers.checkValues(context.canva);
+            const { rows, columns } = checkValues(context.canva);
             if (rows.length > 0 || columns.length > 0) {
                 return true;
             }
@@ -210,16 +200,19 @@ export const switchMachine = setup({
     },
 }).createMachine({
     /** @xstate-layout N4IgpgJg5mDOIC5SwO4EsAuBjAFgYgCc4MBDAjAfShIFswBtABgF1FQAHAe1kzU4Ds2IAB6IALACYANCACeiCWICcAOgDMEiQA4xAViUBGXQDZjhiQF8LM1JlwqA4rTAUAymAwBXdniaskIFw8GHyCAaIIaroSKsYA7AZKumIGjNEGCWIy8ggSUSpKEkrGjHFxagnGklY26Ng4js4UAJIQADZgeGj87J6UNJwAbgwsQkG8AkIRKTFR2loZxgZaJkrZiKZi6gbGaiVxEqVmWjUgtvWNdC3tnd29-UMMBv4c3BNhoBHlcSq6B2KmNRaOIrLTSOQbHQFLRaYoSEwGNSMYqnc72JxXVodLo9PoUAbDegSF6BN4hSbhRAGAyKWL6VIMsRxRhadYIJYxJSMAwArkSIxKDSouroppYzpEWCkch+MZk0JTRBArQqIpmRJAzS7NnLXQqSTFJG6LRqJQLE7WM4ihoYlwAYRI-EGJAoAFFnW1PCRyfxfKMAuMfYqEIjSnSqro9koDsU4myJFVwxrdIxtGJSsK7Damg6nS73SRPd7Qr5nnLggrKQhisYVGUossTYY4kydWUVMDDkolGI9ozdJmLraKLnnW6PV6fb5ieX3sG4roDCpGCkTWk1GoxLCDPGWfqN8aSmCzFEB6d+JwIHAhGicLOg1WALTGNlc9QHZFlGmaVOD0VXdwvHYe9K0+BRuV+PItwODI4mMRR42UDtNBNEx4JSBI-2zTEbhAikwPZLdfkYYw-iSFlYQSNljTUOtTXglYQS0Mwz1qLNLntR0xwLIsH1eCt8JEKkSKXLRGBXZY1GWOJozjCEEDEJD4SZaNdEjaIKiwji3X4CA8I+ISQ1XFQMiMGlyhYio2RSLZ0x5ZZ4L+NI0isKwgA */
-    context: {
+    context: ({ input }) =>({
         score : {
             current : 0,
             best : null
         },
-        cursor: initialValues.cursor,
-        // canva: generateRandomArray(getDailyString(), initialValues.canvaSize.height, initialValues.canvaSize.width),
-        canva: generateRandomArray("test", initialValues.canvaSize.height, initialValues.canvaSize.width),
-        canvaSize: initialValues.canvaSize,
-    },
+        cursor: {
+            x: 0,
+            y: 0,
+            value: 1
+        },
+        canva: input.canva,
+        initialCanva: input.canva,
+    }),
 
     id: "switch",
     initial: "Game_Setup",
@@ -306,5 +299,5 @@ export const switchMachine = setup({
     }
 });
 
-export const switchActor = createActor(switchMachine);
-switchActor.start();
+
+export default switchMachine

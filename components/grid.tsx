@@ -1,4 +1,4 @@
-import matrixHelpers from '@/lib/matrixHelpers';
+import { addPadding } from '@/lib/matrixHelpers';
 import { cn } from '@/lib/utils';
 import { motion } from "motion/react";
 const BLOCK_COLORS = [
@@ -28,7 +28,7 @@ export function Grid({
 
     return (
         <motion.div className={cn("flex-grow flex items-center justify-center flex-col-reverse", className)} {...props}>
-                 {matrixHelpers.addPadding(canva, 0).map((row, y) => (
+                 {addPadding(canva, 0).map((row, y) => (
                     <motion.div key={`y-${y}`} className={`y-${y} flex`}>
                         {row.map((cell, x) => (
 

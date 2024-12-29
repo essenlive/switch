@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Sunrise, CircleArrowRight, Timer, Dices, Settings } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "motion/react"
+import { getDailyString } from "@/lib/utils";
 
 export default function Home() {
 
@@ -17,7 +18,15 @@ export default function Home() {
   }
   return (
     <main className="flex-grow flex flex-col items-stretch justfy-stretch h-full w-full space-y-4">
-        <Link href="/daily" className="flex-grow ">
+      <Link
+        className="flex-grow "
+        href={{
+          pathname: '/g',
+          query: { 
+            s: getDailyString(),
+            cs: '6x8'
+          },
+        }} >
         <motion.div whileHover={{ scale: 1.05 }} className="flex-grow flex flex-col p-4 bg-slate-200 cursor-pointer rounded-lg"> 
           <div className="py-4">
 

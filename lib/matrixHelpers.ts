@@ -1,11 +1,13 @@
-const matrixHelpers = {
-    removePadding(canva: number[][]) {
+import Prando from 'prando';
+
+
+export function removePadding(canva: number[][]){
         const trimmedCanva = structuredClone(canva)
         trimmedCanva.pop(); trimmedCanva.shift();
         trimmedCanva.forEach(row => { row.pop(); row.shift(); })
         return trimmedCanva
-    },
-    addPadding(canva: number[][], value:number) {
+    }
+export function addPadding(canva: number[][], value:number) {
         const paddedCanva = structuredClone(canva)
         paddedCanva.forEach(row => {
             row.push(value);
@@ -14,8 +16,9 @@ const matrixHelpers = {
         paddedCanva.push(Array(paddedCanva[0].length).fill(value));
         paddedCanva.unshift(Array(paddedCanva[0].length).fill(value));
         return paddedCanva
-    },
-    removeRows(canva: number[][], rowsIndexes: number[]) {
+    }
+
+export function removeRows(canva: number[][], rowsIndexes: number[]) {
         rowsIndexes = rowsIndexes.sort((a, b) => b - a);
         const newCanva = structuredClone(canva)
         rowsIndexes.forEach(rowIndex => {
@@ -23,13 +26,13 @@ const matrixHelpers = {
         })
 
         return newCanva
-    },
-    removeRow(canva: number[][], rowIndex: number) {
+    }
+export function removeRow(canva: number[][], rowIndex: number) {
         const newCanva = structuredClone(canva)
         newCanva.splice(rowIndex, 1);
         return newCanva
-    },
-    removeColumns(canva: number[][], columnsIndexes: number[]) {
+    }
+export function removeColumns(canva: number[][], columnsIndexes: number[]) {
         columnsIndexes = columnsIndexes.sort((a, b) => b - a);
         const newCanva = structuredClone(canva)
         newCanva.forEach(row => {
@@ -38,36 +41,37 @@ const matrixHelpers = {
             })
         });
         return newCanva
-    },
-    removeColumn(canva: number[][], columnIndex: number) {
+    }
+export function removeColumn(canva: number[][], columnIndex: number) {
         const newCanva = structuredClone(canva)
         newCanva.forEach(row => {
             row.splice(columnIndex, 1);
         });
         return newCanva
-    },
-    // Add an item to the start of a specific row
-    addToRowStart(canva: number[][], rowIndex: number, newItem: number) {
+    }
+
+// Add an item to the start of a specific row
+export function addToRowStart(canva: number[][], rowIndex: number, newItem: number) {
         canva[rowIndex].unshift(newItem);
         const removedValue = canva[rowIndex].pop() ?? newItem  ;
         return {
             removedValue,
             canva
         };
-    },
+    }
 
     // Add an item to the end of a specific row
-    addToRowEnd(canva: number[][], rowIndex: number, newItem: number) {
+export function addToRowEnd(canva: number[][], rowIndex: number, newItem: number) {
         canva[rowIndex].push(newItem);
         const removedValue = canva[rowIndex].shift() ?? newItem;
         return {
             removedValue,
             canva
         };
-    },
+    }
 
     // Add an item to the start of a specific column
-    addToColumnStart(canva: number[][], columnIndex: number, newItem: number) {
+export function addToColumnStart(canva: number[][], columnIndex: number, newItem: number) {
 
         let itemToShift = newItem;
         canva.forEach(row => {
@@ -81,10 +85,10 @@ const matrixHelpers = {
             removedValue: itemToShift,
             canva
         };
-    },
+    }
 
     // Add an item to the end of a specific column
-    addToColumnEnd(canva: number[][], columnIndex: number, newItem: number) {
+export function addToColumnEnd(canva: number[][], columnIndex: number, newItem: number) {
 
         let itemToShift = newItem;
         canva.reverse().forEach(row => {
@@ -99,54 +103,181 @@ const matrixHelpers = {
             removedValue: itemToShift,
             canva: canva.reverse()
         };
-    },
-    checkValues(canva: number[][]) {
-        if (!canva || !Array.isArray(canva) || canva.length === 0) {
-            throw new Error('Invalid canva: Must be a non-empty array of arrays');
-        }
-        const result: {
-            rows: number[],
-            columns: number[],
-            // rowValues: number[],
-            // columnValues: number[],
-        } = {
-            rows: [],    // Will store indices of rows with same values
-            columns: [], // Will store indices of columns with same values
-            // rowValues: [],    // Will store the repeated values found in rows
-            // columnValues: []  // Will store the repeated values found in columns
-        };
+    }
+export function checkValues(canva: number[][]) {
+    if (!canva || !Array.isArray(canva) || canva.length === 0) {
+        throw new Error('Invalid canva: Must be a non-empty array of arrays');
+    }
+    const result: {
+        rows: number[],
+        columns: number[],
+        // rowValues: number[],
+        // columnValues: number[],
+    } = {
+        rows: [],    // Will store indices of rows with same values
+        columns: [], // Will store indices of columns with same values
+        // rowValues: [],    // Will store the repeated values found in rows
+        // columnValues: []  // Will store the repeated values found in columns
+    };
 
-        // Check rows
-        canva.forEach((row: number[], rowIndex: number) => {
-            if (!Array.isArray(row)) {
-                throw new Error(`Invalid row at index ${rowIndex}: Must be an array`);
-            }
-
-            if (row.length > 0) {
-                const firstValue: number = row[0];
-                if (row.every(value => value === firstValue)) {
-                    result.rows.push(rowIndex);
-                    // result.rowValues.push(firstValue);
-                }
-            }
-        });
-
-        // Check columns
-        const columnCount = canva[0].length;
-        for (let colIndex = 0; colIndex < columnCount; colIndex++) {
-            const firstValue = canva[0][colIndex];
-            const isAllSame = canva.every(row => row[colIndex] === firstValue);
-
-            if (isAllSame) {
-                result.columns.push(colIndex);
-                // result.columnValues.push(firstValue);
-            }
+    // Check rows
+    canva.forEach((row: number[], rowIndex: number) => {
+        if (!Array.isArray(row)) {
+            throw new Error(`Invalid row at index ${rowIndex}: Must be an array`);
         }
 
+        if (row.length > 0) {
+            const firstValue: number = row[0];
+            if (row.every(value => value === firstValue)) {
+                result.rows.push(rowIndex);
+                // result.rowValues.push(firstValue);
+            }
+        }
+    });
+
+    // Check columns
+    const columnCount = canva[0].length;
+    for (let colIndex = 0; colIndex < columnCount; colIndex++) {
+        const firstValue = canva[0][colIndex];
+        const isAllSame = canva.every(row => row[colIndex] === firstValue);
+
+        if (isAllSame) {
+            result.columns.push(colIndex);
+            // result.columnValues.push(firstValue);
+        }
+    }
+
+    return {
+        ...result
+    };
+}
+
+
+// Generate random array from seed number !! This is not good code !! 
+export function generateRandomMatrix(str: string, rows: number, cols: number): number[][] {
+    // const seed = hashStringToSeed(str);
+    const rng = new Prando(str);
+    
+    const randomArray: number[][] = [];
+    for (let i = 0; i < rows; i++) {
+        const row: number[] = [];
+        for (let j = 0; j < cols; j++) {
+            const randomValue = Math.floor(rng.next(1, 5));
+            row.push(randomValue);
+        }
+        randomArray.push(row);
+    }
+
+    // Check for lines and reset
+
+
+    return randomArray;
+}
+
+
+export function matrixFromParams({s, cs, c, t}:{
+  s: string,
+  cs: string,
+  c: string,
+  t: string
+}): {
+  validParams: boolean, 
+  error : string | null,
+  input : {
+    timerMode: boolean,
+    canva :number[][]
+  }
+} {
+    // Check for timermode, return false if not explicitly true
+    const timerMode = t === "true" ? true : false;    
+    
+    // Prepare invalid params mode
+    const invalidParams = {
+        validParams : false,
+        input : {      
+            timerMode : timerMode,
+            canva :[
+                [4,4,1,1,1,1,4,4],
+                [4,1,4,4,4,4,1,4],
+                [1,4,4,1,1,4,4,1],
+                [1,4,4,4,4,4,4,1],
+                [1,4,4,1,1,4,4,1],
+                [1,4,4,1,1,4,4,1],
+                [4,1,4,4,4,4,1,4],
+                [4,4,1,1,1,1,4,4]
+            ]
+        }
+
+    }
+
+    // Return an error if canva size is missing
+    if (!cs) return ({ error: "Canva size (cs) missing. ", ...invalidParams })
+    // Return an error if canva data and seed are missing
+    if (!c && !s) return ({ error: "Canva (c) and Seed (s) are missing, use one or the other. ", ...invalidParams })
+
+    // Get and validate canva size.
+    const canvaSize = {
+      width: Number(cs.split("x")[0]),
+      height: Number(cs.split("x")[1]),
+    }    
+    if (isNaN(canvaSize.width) || isNaN(canvaSize.height)) return ({ error: "Canva size (cs) is not correctly formatted : #Row x #Col", ...invalidParams })
+
+        if(c){
+        // Check the canva data length
+        if (c.length !== canvaSize.height * canvaSize.width) return ({ error: `Canva (c = ${c.length}) data does not match Canva Size (cs = ${canvaSize.height * canvaSize.width} )`, ...invalidParams })
+        // Create canva format
+        const canva: number[][] = [];
+        const charArray: number[] = Array.from(c).map((el) => Number(el));
+        for (let i = 0; i < charArray.length; i += canvaSize.width) {
+          canva.push(charArray.slice(i, i + canvaSize.width));
+        }    
+        // Check the canva data 
+        if (!canva.every(row => row.every(elem => [1, 2, 3, 4].includes(elem)))) return ({ error: `Canva (c) data does not contain correct data ([1,2,3,4])`, ...invalidParams })
+        
         return {
-            ...result
-        };
-    },
-};
+            validParams: true,
+            error: null,
+            input: {
+                timerMode,
+                canva
+            }
+        }
+    }
+    // Create custom canva from seed
+    else if(s){
+        const canva = generateRandomMatrix(s, canvaSize.height, canvaSize.width)
+        return {
+            validParams: true,
+            error: null,
+            input: {
+                timerMode,
+                canva
+            }
+        }
+    }
+    return ({ error: `Problem with data url`, ...invalidParams })
+}
 
-export default matrixHelpers
+  
+  //   if (!canva.every(row => row.every(elem => [1, 2, 3, 4].includes(elem)))) {
+
+  //     console.log("Invalid params : Canva is not filled with correct values")
+  //     canvaSize = { width: 8, height: 8 }
+  //     canva = errorCanva;
+  //     wrongUrl();
+  //     // router.push('/')
+  //   }
+  // }
+  // else if (searchParams.get("s") && typeof (searchParams.get("s")) === "string"){
+  //   canva = generateRandomArray(searchParams.get("s") ?? "hello", canvaSize.width, canvaSize.height);
+  // }
+  // else {
+  //   console.log("Invalid canva params")
+  //   canvaSize = { width: 8, height: 8 }
+  //   canva = errorCanva;
+  //   wrongUrl();
+  //   // router.push('/')
+  // }
+    
+
+  // export 
