@@ -265,26 +265,8 @@ export function matrixFromParams({s, cs, c, t}:{
     return ({ error: `Problem with data url`, ...invalidParams })
 }
 
-  
-  //   if (!canva.every(row => row.every(elem => [1, 2, 3, 4].includes(elem)))) {
-
-  //     console.log("Invalid params : Canva is not filled with correct values")
-  //     canvaSize = { width: 8, height: 8 }
-  //     canva = errorCanva;
-  //     wrongUrl();
-  //     // router.push('/')
-  //   }
-  // }
-  // else if (searchParams.get("s") && typeof (searchParams.get("s")) === "string"){
-  //   canva = generateRandomArray(searchParams.get("s") ?? "hello", canvaSize.width, canvaSize.height);
-  // }
-  // else {
-  //   console.log("Invalid canva params")
-  //   canvaSize = { width: 8, height: 8 }
-  //   canva = errorCanva;
-  //   wrongUrl();
-  //   // router.push('/')
-  // }
-    
-
-  // export 
+export function getMatrixString( canva:number[][] ) : string{
+    const VALUE_MAP = ['🟥','🟦','🟩','🟨']
+    const clonedCanva = structuredClone(canva)
+    return clonedCanva.reverse().map(row => row.map(value => VALUE_MAP[value - 1]).join(' ')).join('\n');
+}

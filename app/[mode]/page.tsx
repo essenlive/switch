@@ -110,7 +110,8 @@ export default function Page() {
       <EndScreen
           className={""}
           visible={state === "Game_End"}
-          url={context.url}
+        url={context.url}
+        initialCanva={context.initialCanva}
           restart={() => send({ type: 'restart_game', direction: 'down' })}
           score={context.score}
         />

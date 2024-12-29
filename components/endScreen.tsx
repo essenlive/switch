@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Share2, CircleArrowRight, PartyPopper, Trophy, Medal } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { motion, AnimatePresence} from "motion/react"
+import { getMatrixString } from "@/lib/matrixHelpers"
 
 
 export function EndScreen({
@@ -11,12 +12,12 @@ export function EndScreen({
     score,
     url,
     restart,
+    initialCanva,
     ...props
 }) {
     const { toast } = useToast()
     const copyToClipboard = () => {
-        const date = new Date();
-        navigator.clipboard.writeText(`I solved switch ${date.getDate() + 1}/${date.getMonth() + 1} in ${score.best < score.current ? score.best : score.current} moves. Try yourself ! https://switch.essenlive.xyz/g${url}`)
+        navigator.clipboard.writeText(`🎊 I solved this switch grid in ${score.best !== null && score.best < score.current ? score.best : score.current} moves. \n${getMatrixString(initialCanva)}\nTry yourself !\nhttps://switch.essenlive.xyz/g${url}`)
         toast({
             title: "Copied to clipboard",
             description: "You can now share your score with your friends",
