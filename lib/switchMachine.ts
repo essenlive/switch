@@ -25,11 +25,13 @@ const switchMachine = setup({
             };
             canva: number[][];
             initialCanva: number[][];
+            url : string;
 
         },
         input: {} as {
             canva: number[][],
             timerMode: boolean,
+            url: string
         },
         events: {} as
             | { 
@@ -210,6 +212,7 @@ const switchMachine = setup({
             y: 0,
             value: 1
         },
+        url : input.url,
         canva: input.canva,
         initialCanva: input.canva,
     }),

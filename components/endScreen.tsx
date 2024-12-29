@@ -9,13 +9,14 @@ export function EndScreen({
     className,
     visible,
     score,
+    url,
     restart,
     ...props
 }) {
     const { toast } = useToast()
     const copyToClipboard = () => {
         const date = new Date();
-        navigator.clipboard.writeText(`I solved switch ${date.getDate() + 1}/${date.getMonth() + 1} in ${score.best < score.current ? score.best : score.current} moves. Try yourself ! https://switch.essenlive.xyz`)
+        navigator.clipboard.writeText(`I solved switch ${date.getDate() + 1}/${date.getMonth() + 1} in ${score.best < score.current ? score.best : score.current} moves. Try yourself ! https://switch.essenlive.xyz/g${url}`)
         toast({
             title: "Copied to clipboard",
             description: "You can now share your score with your friends",

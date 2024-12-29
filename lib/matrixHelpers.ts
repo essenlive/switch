@@ -185,7 +185,8 @@ export function matrixFromParams({s, cs, c, t}:{
   error : string | null,
   input : {
     timerMode: boolean,
-    canva :number[][]
+    canva :number[][],
+    url: string
   }
 } {
     // Check for timermode, return false if not explicitly true
@@ -205,7 +206,8 @@ export function matrixFromParams({s, cs, c, t}:{
                 [1,4,4,1,1,4,4,1],
                 [4,1,4,4,4,4,1,4],
                 [4,4,1,1,1,1,4,4]
-            ]
+            ],
+            url: ""
         }
 
     }
@@ -233,25 +235,30 @@ export function matrixFromParams({s, cs, c, t}:{
         }    
         // Check the canva data 
         if (!canva.every(row => row.every(elem => [1, 2, 3, 4].includes(elem)))) return ({ error: `Canva (c) data does not contain correct data ([1,2,3,4])`, ...invalidParams })
-        
+        // Reformat url
+            const url = `?c=${canva.map((row) => row.join('')).join('')}&cs=${canvaSize.width}x${canvaSize.height}`
         return {
             validParams: true,
             error: null,
             input: {
                 timerMode,
-                canva
+                canva,
+                url
             }
         }
     }
     // Create custom canva from seed
     else if(s){
-        const canva = generateRandomMatrix(s, canvaSize.height, canvaSize.width)
+        const canva = generateRandomMatrix(s, canvaSize.height, canvaSize.width);
+        // Reformat url
+        const url = `?s=${s}&cs=${canvaSize.width}x${canvaSize.height}`
         return {
             validParams: true,
             error: null,
             input: {
                 timerMode,
-                canva
+                canva,
+                url
             }
         }
     }
