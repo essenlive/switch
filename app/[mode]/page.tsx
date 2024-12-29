@@ -11,6 +11,9 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { matrixFromParams } from "@/lib/matrixHelpers"
 import { useToast } from "@/hooks/use-toast";
 
+
+let moveCeiling: number = 0;
+
 export default function Page() {
   const router = useRouter()
   const { toast } = useToast()
@@ -39,7 +42,6 @@ export default function Page() {
   const context = snapshot.context;
   const state = snapshot.value;
 
-  let moveCeiling: number = 0;
   const firstCeiling: number = 150;
   const successiveCeilings: number = 50;
   const gestureHandlers = useSwipeable({
@@ -67,7 +69,7 @@ export default function Page() {
 
     },
     swipeDuration: 500,
-    preventScrollOnSwipe: false,
+    preventScrollOnSwipe: true,
   });
 
   const handleKeyPress = useCallback((event: KeyboardEvent) => {
