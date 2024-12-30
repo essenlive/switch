@@ -27,9 +27,9 @@ export function Grid({
 
 
     return (
-        <motion.div className={cn("flex-grow flex items-center justify-center flex-col-reverse", className)} {...props}>
+        <motion.div className={cn("flex-grow flex items-center justify-center flex-col-reverse  gap-2", className)} {...props}>
                  {addPadding(canva, 0).map((row, y) => (
-                    <motion.div key={`y-${y}`} className={`y-${y} flex`}>
+                    <motion.div key={`y-${y}`} className={`y-${y} flex gap-2`}>
                         {row.map((cell, x) => (
 
 
@@ -37,7 +37,7 @@ export function Grid({
                                 whileHover={{ scale: 1.05 }}
                                 key={`x-${x} `}
                                 className={cn(
-                                    "cursor-pointer aspect-square w-5 h-5 m-1 rounded-sm flex justify-center items-center align-middle text-center",
+                                    "cursor-pointer aspect-square w-6 h-6 rounded-sm flex justify-center items-center align-middle text-center",
                                     BLOCK_COLORS[cell],
                                     cursor.y === y && cursor.x === x && BLOCK_COLORS[cursor.value]
                                 )}

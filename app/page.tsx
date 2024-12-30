@@ -1,10 +1,12 @@
 'use client'
 
 import Link from "next/link";
-import { Sunrise, CircleArrowRight, Timer, Dices, Settings } from "lucide-react";
+import { Sunrise, CircleArrowRight, Timer, Dices } from "lucide-react";
 import { motion } from "motion/react"
 import { useToast } from "@/hooks/use-toast";
 import { getDailyString } from "@/lib/utils";
+import { useState, useEffect } from "react";
+import { getRandomString } from "@/lib/utils";
 
 export default function Home() {
   const { toast } = useToast()
@@ -15,6 +17,13 @@ export default function Home() {
       duration: 5000
     })
   }
+
+    // Add random string to useEffect to avoid hydration errrors
+    const [randomString, setRandomString] = useState("");
+    useEffect(()=>{
+      setRandomString(getRandomString());
+    },[])
+  
   return (
     <main className="flex-grow flex flex-col items-stretch justfy-stretch h-full w-full space-y-4">
       <Link
@@ -46,8 +55,16 @@ export default function Home() {
           </motion.div>
       </Link>
 
-      <Link onClick={notAvailable} className="flex-grow " href={""} >
-        <motion.div whileHover={{ scale: 1.05 }} className="flex-grow flex flex-col p-4 bg-slate-200  cursor-not-allowed opacity-30 rounded-lg "> 
+      <Link
+        className="flex-grow "
+        href={{
+          pathname: '/r',
+          query: {
+            s: randomString,
+            cs: '6x8'
+          },
+        }} >
+        <motion.div whileHover={{ scale: 1.05 }} className="flex-grow flex flex-col p-4 bg-slate-200  rounded-lg "> 
           <div className="py-4">
 
             <Dices size={32} />
@@ -66,27 +83,7 @@ export default function Home() {
           </div >
         </motion.div >
       </Link>
-      <Link onClick={notAvailable} href="" className="flex-grow ">
-        <motion.div whileHover={{ scale: 1.05 }} className="flex-grow flex flex-col p-4 bg-slate-200  cursor-not-allowed opacity-30 rounded-lg"> 
-
-        <div className="py-4">
-
-          <Settings size={32} />
-        </div>
-        <h2 className="text-2xl font-bold ">
-          Custom Mode
-        </h2>
-        <p className="flex-grow text-xl my-4">
-          Setup the rules of the game. Change the size, the timer and the number of colors.
-        </p>
-        <div  className="flex justify-between items-center">
-          <span className="font-bold text-xl">
-            Play  custom grid
-          </span>
-          <CircleArrowRight />
-          </div>
-        </motion.div>
-      </Link>
+      
       <Link onClick={notAvailable} href="" className="flex-grow ">
         <motion.div whileHover={{ scale: 1.05 }} className="flex-grow flex flex-col p-4 bg-slate-200  cursor-not-allowed opacity-30 rounded-lg">
 

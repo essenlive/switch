@@ -1,13 +1,16 @@
 import { cn } from "@/lib/utils"
-import { RotateCcw, Trophy, MoveHorizontal } from "lucide-react";
+import { RotateCcw, Trophy, MoveHorizontal, Dices } from "lucide-react";
 import { motion } from "motion/react";
+import Link from "next/link";
 
 export function Score({
     className,
     score,
     restart,
+    randomUrl,
     ...props
 }) {
+
 
 
     return (
@@ -18,6 +21,15 @@ export function Score({
                     {score.current}
                 </span>
             </div>
+            { randomUrl && 
+                <Link
+                className="flex"
+                href={randomUrl} >
+                    <motion.div className="flex justify-center items-center p-3 aspect-square cursor-pointer bg-slate-200 rounded-lg" onClick={restart}>
+                        <Dices />
+                    </motion.div>
+                </Link>
+            }
             <motion.div whileHover={{ scale: 1.1 }} className="flex justify-center items-center p-3 aspect-square cursor-pointer bg-slate-200 rounded-lg" onClick={restart}>
                 <RotateCcw />
             </motion.div>

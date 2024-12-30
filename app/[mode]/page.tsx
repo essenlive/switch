@@ -2,21 +2,24 @@
 
 import { useMachine } from '@xstate/react';
 import switchMachine from "@/lib/switchMachine"
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { EndScreen } from "@/components/endScreen";
 import { Score } from "@/components/score";
 import { Grid } from "@/components/grid";
-import { useSearchParams, useRouter } from 'next/navigation'
+import { useSearchParams, useParams, useRouter } from 'next/navigation'
 import { matrixFromParams } from "@/lib/matrixHelpers"
 import { useToast } from "@/hooks/use-toast";
 import { useControls } from '@/hooks/use-controls';
 
+import { getRandomString } from "@/lib/utils";
 
 export default function Page() {
   const router = useRouter()
   const { toast } = useToast()
+  const { mode } = useParams<{ mode: string }>()
   const searchParams = useSearchParams()
 
+  
   
   const { validParams, error, input } = useMemo(() => matrixFromParams({
     s: searchParams.get('s') || '',
@@ -24,7 +27,7 @@ export default function Page() {
     c: searchParams.get('c') || '',
     t: searchParams.get('t') || ''
   }), [searchParams])
-
+  
   // Redirect if params are wrong
   useEffect(() => {
     if (!validParams) {
@@ -36,9 +39,16 @@ export default function Page() {
       router.push("/")
     }
   }, [validParams, toast, error, router]);
-
+  
   const [snapshot, send] = useMachine(switchMachine, { input: input });
-
+  
+  // Add random string to useEffect to avoid hydration errrors
+  const [randomString, setRandomString] = useState("");
+  useEffect(()=>{
+    setRandomString(getRandomString());
+    send({ type: "restart_game", params: { input } })
+  },[input, send])
+  
   const gestureHandlers = useControls({
     "SwipeUp": () => {send({type : "input_move", params : {direction : "up"}})},
     "SwipeRight": () => {send({ type: "input_move", params: { direction: "right" } })},
@@ -50,7 +60,7 @@ export default function Page() {
     "ArrowLeft": () => {send({ type: "input_move", params: { direction: "left" } })},
     "Space": () => {send({ type: "restart_game", params: { input: null } })},
   });
-
+  
   return (
     <main className="flex-grow flex flex-col items-stretch justify-stretch h-full w-full space-y-4">
       <EndScreen
@@ -73,6 +83,7 @@ export default function Page() {
       }
       <Score
         className={""}
+        randomUrl={ mode === "r" ? `/r?s=${randomString}&cs=6x8` : null}
         restart={() => send({ type: 'restart_game', params: { input: null } })}
         score={snapshot.context.score}
       />

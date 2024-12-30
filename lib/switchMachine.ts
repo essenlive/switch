@@ -140,11 +140,11 @@ const switchMachine = setup({
             clonedContext.cursor = { x: 0, y: 0, value: 1 }
             if(params.input) {
                 clonedContext.url = params.input.url;
-                clonedContext.canva = params.input.canva;
-                clonedContext.initialCanva = params.input.canva;
+                clonedContext.canva = structuredClone(params.input.canva);
+                clonedContext.initialCanva = structuredClone(params.input.canva);
             }
             else{
-                clonedContext.canva = clonedContext.initialCanva;
+                clonedContext.canva = structuredClone(clonedContext.initialCanva);
             }
 
             return clonedContext;
