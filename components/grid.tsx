@@ -37,7 +37,7 @@ export function Grid({
                                 whileHover={{ scale: 1.05 }}
                                 key={`x-${x} `}
                                 className={cn(
-                                    "cursor-pointer md:w-8 w-6 md:h-8 h-6 m-1 rounded-sm flex justify-center items-center align-middle text-center",
+                                    "cursor-pointer aspect-square w-5 h-5 m-1 rounded-sm flex justify-center items-center align-middle text-center",
                                     BLOCK_COLORS[cell],
                                     cursor.y === y && cursor.x === x && BLOCK_COLORS[cursor.value]
                                 )}
