@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Sunrise, CircleArrowRight, Timer, Dices, Settings } from "lucide-react";
 import { motion } from "motion/react"
 import { useToast } from "@/hooks/use-toast";
-import { getDailyString, getRandomString } from "@/lib/utils";
+import { getDailyString } from "@/lib/utils";
 
 export default function Home() {
   const { toast } = useToast()
@@ -46,16 +46,8 @@ export default function Home() {
           </motion.div>
       </Link>
 
-      <Link
-        className="flex-grow "
-        href={{
-          pathname: '/r',
-          query: {
-            s: getRandomString(),
-            cs: '6x8'
-          },
-        }} >
-          <motion.div whileHover={{ scale: 1.05 }} className="flex-grow flex flex-col p-4 bg-slate-200  rounded-lg"> 
+      <Link onClick={notAvailable} className="flex-grow " href={""} >
+        <motion.div whileHover={{ scale: 1.05 }} className="flex-grow flex flex-col p-4 bg-slate-200  cursor-not-allowed opacity-30 rounded-lg "> 
           <div className="py-4">
 
             <Dices size={32} />

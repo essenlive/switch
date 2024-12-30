@@ -2,32 +2,29 @@
 
 import { useMachine } from '@xstate/react';
 import switchMachine from "@/lib/switchMachine"
-import { useEffect, useCallback } from 'react'
-import { useSwipeable } from 'react-swipeable';
+import { useEffect, useMemo } from 'react'
 import { EndScreen } from "@/components/endScreen";
 import { Score } from "@/components/score";
 import { Grid } from "@/components/grid";
-import { useSearchParams, useParams, useRouter } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { matrixFromParams } from "@/lib/matrixHelpers"
 import { useToast } from "@/hooks/use-toast";
+import { useControls } from '@/hooks/use-controls';
 
-let moveThreshold: number = 0;
 
 export default function Page() {
   const router = useRouter()
   const { toast } = useToast()
-  // Get route params to get the mode 
-  const { mode } = useParams<{ mode: string }>()
-  // Get query parameters for generating the grid
   const searchParams = useSearchParams()
 
-
-  const { validParams, error, input } = matrixFromParams({
+  
+  const { validParams, error, input } = useMemo(() => matrixFromParams({
     s: searchParams.get('s') || '',
     cs: searchParams.get('cs') || '',
     c: searchParams.get('c') || '',
     t: searchParams.get('t') || ''
-  })
+  }), [searchParams])
+
   // Redirect if params are wrong
   useEffect(() => {
     if (!validParams) {
@@ -42,73 +39,17 @@ export default function Page() {
 
   const [snapshot, send] = useMachine(switchMachine, { input: input });
 
-  useEffect(() => {
-    send({ type: 'restart_game', params: { input: input } })
-  }, [input, send])
-
-
-  const firstThreshold: number = 150;
-  const successiveThresholds: number = 50;
-  const gestureHandlers = useSwipeable({
-    onSwiping: (SwipeEventData) => {
-    
-      if (SwipeEventData.first) { moveThreshold = 0 ;}
-      if( SwipeEventData.absX > moveThreshold || SwipeEventData.absY > moveThreshold ){
-        if (SwipeEventData.first) { moveThreshold = firstThreshold;}
-        else { moveThreshold = moveThreshold + successiveThresholds;}
-        switch(SwipeEventData.dir){
-          case 'Left':
-            send({ type: 'input_move', params : {direction: 'left' }});
-            break;
-          case 'Right':
-            send({ type: 'input_move', params: { direction: 'right' }});
-            break;
-          case 'Up':
-            send({ type: 'input_move', params: { direction: 'up' } });
-            break;
-          case 'Down':
-            send({ type: 'input_move', params: { direction: 'down' } });
-            break;
-        }
-      }
-
-    },
-    swipeDuration: 500,
-    preventScrollOnSwipe: true,
+  const gestureHandlers = useControls({
+    "SwipeUp": () => {send({type : "input_move", params : {direction : "up"}})},
+    "SwipeRight": () => {send({ type: "input_move", params: { direction: "right" } })},
+    "SwipeDown": () => {send({ type: "input_move", params: { direction: "down" } })},
+    "SwipeLeft": () => {send({ type: "input_move", params: { direction: "left" } })},
+    "ArrowUp": () => {send({ type: "input_move", params: { direction: "up" } })},
+    "ArrowRight": () => {send({ type: "input_move", params: { direction: "right" } })},
+    "ArrowDown": () => {send({ type: "input_move", params: { direction: "down" } })},
+    "ArrowLeft": () => {send({ type: "input_move", params: { direction: "left" } })},
+    "Space": () => {send({ type: "restart_game", params: { input: null } })},
   });
-
-  const handleKeyPress = useCallback((event: KeyboardEvent) => {
-    switch (event.key) {
-      case "ArrowLeft":
-        event.preventDefault()
-        send({ type: 'input_move', params: { direction: 'left' }})
-        break;
-      case "ArrowRight":
-        event.preventDefault()
-        send({ type: 'input_move',  params : {direction: 'right' }})
-        break;
-      case "ArrowUp":
-        event.preventDefault()
-        send({ type: 'input_move',  params : {direction: 'up' }})
-        break;
-      case "ArrowDown":
-        event.preventDefault()
-        send({ type: 'input_move',  params : {direction: 'down' }})
-        break;
-      case " ":
-        event.preventDefault()
-        send({ type: 'restart_game', params: { input: null } })
-        break;
-      default:
-        break;
-    }
-  }, [send]);
-
-  useEffect(() => {
-    document.addEventListener('keydown', handleKeyPress);
-    return () => { document.removeEventListener('keydown', handleKeyPress); };
-  }, [handleKeyPress]);
-
 
   return (
     <main className="flex-grow flex flex-col items-stretch justify-stretch h-full w-full space-y-4">
@@ -132,7 +73,6 @@ export default function Page() {
       }
       <Score
         className={""}
-        mode={mode}
         restart={() => send({ type: 'restart_game', params: { input: null } })}
         score={snapshot.context.score}
       />
