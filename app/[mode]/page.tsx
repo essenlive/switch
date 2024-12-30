@@ -10,14 +10,12 @@ import { Grid } from "@/components/grid";
 import { useSearchParams, useParams, useRouter } from 'next/navigation'
 import { matrixFromParams } from "@/lib/matrixHelpers"
 import { useToast } from "@/hooks/use-toast";
-import { useLocalStorage } from "@/hooks/use-local-storage";
 
 let moveThreshold: number = 0;
 
 export default function Page() {
   const router = useRouter()
   const { toast } = useToast()
-  const [highscore, setHighscore] = useLocalStorage<number | null>('highscore', null)
   // Get route params to get the mode 
   const { mode } = useParams<{ mode: string }>()
   // Get query parameters for generating the grid
@@ -30,11 +28,6 @@ export default function Page() {
     c: searchParams.get('c') || '',
     t: searchParams.get('t') || ''
   })
-
-  useEffect(() => {
-    send({ type: 'restart_game', params: { input: input } })
-  }, [searchParams])
-
   // Redirect if params are wrong
   useEffect(() => {
     if (!validParams) {
@@ -48,6 +41,10 @@ export default function Page() {
   }, [validParams, toast, error, router]);
 
   const [snapshot, send] = useMachine(switchMachine, { input: input });
+
+  useEffect(() => {
+    send({ type: 'restart_game', params: { input: input } })
+  }, [input, send])
 
 
   const firstThreshold: number = 150;
