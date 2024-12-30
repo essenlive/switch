@@ -306,10 +306,9 @@ const switchMachine = setup({
         },
 
         "Game_End": {
-            enter: {
+            exit: {
                 type: "update_best_score",
             },
-            type: "final",
         },
 
     },
