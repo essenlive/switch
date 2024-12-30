@@ -32,7 +32,7 @@ export function Header({
                 className="flex justify-center items-center p-3 aspect-square cursor-pointer bg-slate-200 rounded-lg">
                     <Info size={24} />
                 </motion.div>
-                <Link href="https://github.com/essenlive/switch" className="aspect-square">
+                <Link href="https://github.com/essenlive/switch" target="_blank" rel="noopener noreferrer" className="aspect-square">
                     <motion.div whileHover={{ scale: 1.1 }} className="flex justify-center items-center p-3 aspect-square bg-slate-200 rounded-lg">
 
                         <Github size={24} />

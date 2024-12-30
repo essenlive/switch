@@ -103,11 +103,11 @@ export function HelpScreen({
                         Credits
                     </h2>
                     <ol className="text-xl mt-2">
-                        <li>Icons are from <Link className="underline" href="https://lucide.dev/">Lucide.dev</Link>.</li>
-                        <li>The app is built with <Link className="underline" href="https://nextjs.org/">Next.js</Link>.</li>
-                        <li>The app is hosted on <Link className="underline" href="https://vercel.com">Vercel</Link>.</li>
-                        <li><Link className="underline" href="https://ui.shadcn.com">Shadcn</Link> is used for the UI.</li>
-                        <li>The game logic is made with <Link className="underline" href="https://stately.ai">xstate</Link>.</li>
+                                <li>Icons are from <Link className="underline" href="https://lucide.dev/" target="_blank" rel="noopener noreferrer">Lucide.dev</Link>.</li>
+                                <li>The app is built with <Link className="underline" href="https://nextjs.org/" target="_blank" rel="noopener noreferrer">Next.js</Link>.</li>
+                                <li>The app is hosted on <Link className="underline" href="https://vercel.com" target="_blank" rel="noopener noreferrer">Vercel</Link>.</li>
+                                <li><Link className="underline" href="https://ui.shadcn.com" target="_blank" rel="noopener noreferrer">Shadcn</Link> is used for the UI.</li>
+                        <li><Link className="underline" href="https://stately.ai" target="_blank" rel="noopener noreferrer">xstate</Link>.</li>
                     </ol>
                 </div>
             </div>
