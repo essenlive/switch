@@ -9,7 +9,12 @@ import {
     addToRowStart
 } from "@/lib/matrixHelpers"
 
-
+type Direction = "up" | "left" | "down" | "right";
+type Input = {
+    canva: number[][],
+    timerMode: boolean,
+    url: string
+}
 
 const switchMachine = setup({
     types: {
@@ -28,30 +33,25 @@ const switchMachine = setup({
             url : string;
 
         },
-        input: {} as {
-            canva: number[][],
-            timerMode: boolean,
-            url: string
-        },
+        input: {} as Input,
         events: {} as
-            | { 
-                type: "input_move",
-                direction: "up" | "down" | "left" | "right"
-             }
-            | {
-                type: "restart_game",
-                direction: "up" | "down" | "left" | "right"
+            | 
+            { 
+                type: "input_move"
+                params: { direction: Direction }
             }
-            | {
-                type: "start_game",
-                direction: "up" | "down" | "left" | "right"
-            },
+            |
+            {
+                type: "restart_game"
+                params: { input: Input | null}
+            }
     },
     actions: {
         move_cursor: assign({
-            cursor: ({ context, event }) => {
+            cursor: ({ context }, params: { direction: Direction }) => {
+                
                 const clonedContext = structuredClone( context );
-                switch (event.direction) {
+                switch (params.direction) {
                     case "up":
                         clonedContext.cursor.y++;
                         break;
@@ -70,7 +70,7 @@ const switchMachine = setup({
                 return clonedContext.cursor;
             },
         }),
-        shift_canva: assign(({ context, event }) => {
+        shift_canva: assign(({ context }, params: { direction: Direction }) => {
             const clonedContext = structuredClone(context);
             let newData : {
                 removedValue: number,
@@ -79,7 +79,7 @@ const switchMachine = setup({
                 removedValue: clonedContext.cursor.value,
                 canva: clonedContext.canva
             };
-            switch (event.direction) {
+            switch (params.direction) {
                 case "down":
                     newData = addToColumnEnd(
                         clonedContext.canva,
@@ -134,12 +134,19 @@ const switchMachine = setup({
 
             return clonedContext;
         }),
-
-        reset_game: assign(({context}) => {
+        set_game: assign(({ context }, params: { input: Input | null }) => {
             const clonedContext = structuredClone(context);
             clonedContext.score.current = 0;
-            clonedContext.canva =context.initialCanva;
-            clonedContext.cursor ={ x: 0, y: 0, value: 1 }
+            clonedContext.cursor = { x: 0, y: 0, value: 1 }
+            if(params.input) {
+                clonedContext.url = params.input.url;
+                clonedContext.canva = params.input.canva;
+                clonedContext.initialCanva = params.input.canva;
+            }
+            else{
+                clonedContext.canva = clonedContext.initialCanva;
+            }
+
             return clonedContext;
         }),
         resize_canva: assign(({ context }) => {
@@ -164,23 +171,23 @@ const switchMachine = setup({
         }),
     },
     guards: {
-        is_invalid_move: ({ context, event }) => {
+        is_invalid_move: ({ context }, params: { direction: "up" | "left" | "down" | "right" }) => {
             // Check for invalid movements
             if (
-                (context.cursor.y <= 0 && event.direction === "down") ||
-                (context.cursor.y >= context.canva.length + 1 && event.direction === "up") ||
-                (context.cursor.x <= 0 && event.direction === "left") ||
-                (context.cursor.x >= context.canva[0].length + 1 && event.direction === "right")
+                (context.cursor.y <= 0 && params.direction === "down") ||
+                (context.cursor.y >= context.canva.length + 1 && params.direction === "up") ||
+                (context.cursor.x <= 0 && params.direction === "left") ||
+                (context.cursor.x >= context.canva[0].length + 1 && params.direction === "right")
             ) {
                 return true;
             }
             return false;
         },
-        is_cursor_move: ({ context, event }) => {
+        is_cursor_move: ({ context }, params: { direction: "up" | "left" | "down" | "right" }) => {
             // Check for simple movements
             if (
-                ((context.cursor.y === 0 || context.cursor.y === context.canva.length + 1) && (event.direction === "left" || event.direction === "right")) ||
-                ((context.cursor.x === 0 || context.cursor.x === context.canva[0].length + 1) && (event.direction === "up" || event.direction === "down"))
+                ((context.cursor.y === 0 || context.cursor.y === context.canva.length + 1) && (params.direction === "left" || params.direction === "right")) ||
+                ((context.cursor.x === 0 || context.cursor.x === context.canva[0].length + 1) && (params.direction === "up" || params.direction === "down"))
             ) {
                 return true;
             }
@@ -217,51 +224,57 @@ const switchMachine = setup({
         initialCanva: input.canva,
     }),
 
-    id: "switch",
-    initial: "Game_Setup",
-
-    states: {
-        "Game_Setup": {
-            always: 
-                {
-                target: "Game_Idle",
-                    actions: [
-                        { type: "reset_game" }
-                    ],
-                }
-                
+    id: "switch", 
+    initial: "Game_Idle",
+    on: {
+        restart_game: {
+            target: "#switch.Game_Idle",
+            actions: {
+                type: "set_game",
+                params: ({ event }) => ({ input: event.params.input })
+            },
         },
+    },
+    states: {
         "Game_Idle": {
             on: {
                 input_move: [
                     {
                         target: "Game_Idle",
-                        guard: {
+                        guard: { 
                             type: "is_invalid_move",
+                            params: ({ event }) => ({ direction: event.params.direction })
                         },
                     },
                     {
                         target: "Game_Idle",
                         actions: [
-                            { type: "move_cursor"},
+                            {
+                                type: 'move_cursor',
+                                params: ({ event }) => ({ direction: event.params.direction })
+
+                            },
                             { type: "increment_score"}
                         ],
                         guard: {
                             type: "is_cursor_move",
+                            params: ({ event }) => ({ direction: event.params.direction })
+
                         },
                     },
                     {
                         target: "Game_Canva_Evaluation",
                         actions: [
-                            { type: "shift_canva" },
-                            { type: "increment_score" }
+                            { 
+                                type: "shift_canva",
+                                params: ({ event }) => ({ direction: event.params.direction })
+                            },
+                            { 
+                                type: "increment_score",
+                             }
                         ],
                     },
                 ],
-                restart: {
-                    target: "Game_Setup",
-                    reenter: true
-                },
             },
         },
 
@@ -297,9 +310,6 @@ const switchMachine = setup({
 
     },
 
-    on: {
-        "restart_game": ".Game_Setup"
-    }
 });
 
 

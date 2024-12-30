@@ -7,25 +7,35 @@ import { useSwipeable } from 'react-swipeable';
 import { EndScreen } from "@/components/endScreen";
 import { Score } from "@/components/score";
 import { Grid } from "@/components/grid";
-import { useSearchParams, useRouter } from 'next/navigation'
+import { useSearchParams, useParams, useRouter } from 'next/navigation'
 import { matrixFromParams } from "@/lib/matrixHelpers"
 import { useToast } from "@/hooks/use-toast";
+import { useLocalStorage } from "@/hooks/use-local-storage";
 
-
-let moveCeiling: number = 0;
+let moveThreshold: number = 0;
 
 export default function Page() {
   const router = useRouter()
   const { toast } = useToast()
-
+  const [highscore, setHighscore] = useLocalStorage<number | null>('highscore', null)
+  // Get route params to get the mode 
+  const { mode } = useParams<{ mode: string }>()
+  // Get query parameters for generating the grid
   const searchParams = useSearchParams()
+
+
   const { validParams, error, input } = matrixFromParams({
     s: searchParams.get('s') || '',
     cs: searchParams.get('cs') || '',
     c: searchParams.get('c') || '',
     t: searchParams.get('t') || ''
   })
-  
+
+  useEffect(() => {
+    send({ type: 'restart_game', params: { input: input } })
+  }, [searchParams])
+
+  // Redirect if params are wrong
   useEffect(() => {
     if (!validParams) {
       toast({
@@ -34,35 +44,33 @@ export default function Page() {
         duration: 5000
       })
       router.push("/")
-  }
+    }
   }, [validParams, toast, error, router]);
 
   const [snapshot, send] = useMachine(switchMachine, { input: input });
 
-  const context = snapshot.context;
-  const state = snapshot.value;
 
-  const firstCeiling: number = 150;
-  const successiveCeilings: number = 50;
+  const firstThreshold: number = 150;
+  const successiveThresholds: number = 50;
   const gestureHandlers = useSwipeable({
     onSwiping: (SwipeEventData) => {
     
-      if (SwipeEventData.first) { moveCeiling = 0 ;}
-      if( SwipeEventData.absX > moveCeiling || SwipeEventData.absY > moveCeiling ){
-        if (SwipeEventData.first) { moveCeiling = firstCeiling;}
-        else { moveCeiling = moveCeiling + successiveCeilings;}
+      if (SwipeEventData.first) { moveThreshold = 0 ;}
+      if( SwipeEventData.absX > moveThreshold || SwipeEventData.absY > moveThreshold ){
+        if (SwipeEventData.first) { moveThreshold = firstThreshold;}
+        else { moveThreshold = moveThreshold + successiveThresholds;}
         switch(SwipeEventData.dir){
           case 'Left':
-            send({ type: 'input_move', direction: 'left' });
+            send({ type: 'input_move', params : {direction: 'left' }});
             break;
           case 'Right':
-            send({ type: 'input_move', direction: 'right' });
+            send({ type: 'input_move', params: { direction: 'right' }});
             break;
           case 'Up':
-            send({ type: 'input_move', direction: 'up' });
+            send({ type: 'input_move', params: { direction: 'up' } });
             break;
           case 'Down':
-            send({ type: 'input_move', direction: 'down' });
+            send({ type: 'input_move', params: { direction: 'down' } });
             break;
         }
       }
@@ -76,23 +84,23 @@ export default function Page() {
     switch (event.key) {
       case "ArrowLeft":
         event.preventDefault()
-        send({ type: 'input_move', direction: 'left' })
+        send({ type: 'input_move', params: { direction: 'left' }})
         break;
       case "ArrowRight":
         event.preventDefault()
-        send({ type: 'input_move', direction: 'right' })
+        send({ type: 'input_move',  params : {direction: 'right' }})
         break;
       case "ArrowUp":
         event.preventDefault()
-        send({ type: 'input_move', direction: 'up' })
+        send({ type: 'input_move',  params : {direction: 'up' }})
         break;
       case "ArrowDown":
         event.preventDefault()
-        send({ type: 'input_move', direction: 'down' })
+        send({ type: 'input_move',  params : {direction: 'down' }})
         break;
       case " ":
         event.preventDefault()
-          send({ type: 'restart_game', direction: 'down' })
+        send({ type: 'restart_game', params: { input: null } })
         break;
       default:
         break;
@@ -109,26 +117,27 @@ export default function Page() {
     <main className="flex-grow flex flex-col items-stretch justify-stretch h-full w-full space-y-4">
       <EndScreen
           className={""}
-          visible={state === "Game_End"}
-        url={context.url}
-        initialCanva={context.initialCanva}
-          restart={() => send({ type: 'restart_game', direction: 'down' })}
-          score={context.score}
+          visible={snapshot.value === "Game_End"}
+        url={snapshot.context.url}
+        initialCanva={snapshot.context.initialCanva}
+          restart={() => send({ type: 'restart_game', params: { input: null } })}
+          score={snapshot.context.score}
         />
       
-      { state !== "Game_End" && 
+      { snapshot.value !== "Game_End" && 
         <div className="flex flex-grow p-4 bg-slate-200 rounded-lg"  {...gestureHandlers}>
           <Grid 
             className={""}
-            canva={context.canva}
-            cursor={context.cursor}
+            canva={snapshot.context.canva}
+            cursor={snapshot.context.cursor}
           />
         </div>
       }
       <Score
         className={""}
-        restart={() => send({ type: 'restart_game', direction: 'down' })}
-        score={context.score}
+        mode={mode}
+        restart={() => send({ type: 'restart_game', params: { input: null } })}
+        score={snapshot.context.score}
       />
     </main>
 
