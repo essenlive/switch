@@ -155,20 +155,24 @@ export function checkValues(canva: number[][]) {
 
 // Generate random array from seed number !! This is not good code !! 
 export function generateRandomMatrix(str: string, rows: number, cols: number): number[][] {
-    // const seed = hashStringToSeed(str);
     const rng = new Prando(str);
-    
-    const randomArray: number[][] = [];
-    for (let i = 0; i < rows; i++) {
-        const row: number[] = [];
-        for (let j = 0; j < cols; j++) {
-            const randomValue = Math.floor(rng.next(1, 5));
-            row.push(randomValue);
+    let randomArray: number[][] = [];
+    let hasFullRowOrColumn = true;
+    while (hasFullRowOrColumn) {
+        randomArray = [];
+        for (let i = 0; i < rows; i++) {
+            const row: number[] = [];
+            for (let j = 0; j < cols; j++) {
+                const randomValue = Math.floor(rng.next(1, 5));
+                row.push(randomValue);
+            }
+            randomArray.push(row);
         }
-        randomArray.push(row);
-    }
 
-    // Check for lines and reset
+        hasFullRowOrColumn = randomArray.some(row => row.every(value => value === row[0])) ||
+            randomArray[0].some((_, colIndex) => randomArray.every(row => row[colIndex] === randomArray[0][colIndex]));
+
+    }
 
 
     return randomArray;

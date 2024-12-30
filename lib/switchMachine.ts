@@ -34,6 +34,7 @@ const switchMachine = setup({
 
         },
         input: {} as Input,
+        output: {} as { score : number },
         events: {} as
             | 
             { 
@@ -223,7 +224,9 @@ const switchMachine = setup({
         canva: input.canva,
         initialCanva: input.canva,
     }),
-
+    output: ({ context }) => ({
+        score: context.score.current,
+    }),
     id: "switch", 
     initial: "Game_Idle",
     on: {
@@ -303,9 +306,10 @@ const switchMachine = setup({
         },
 
         "Game_End": {
-            exit: {
+            enter: {
                 type: "update_best_score",
             },
+            type: "final",
         },
 
     },

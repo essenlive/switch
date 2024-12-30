@@ -49,9 +49,10 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
  - [x] Add mode daily
  - [x] Share button
  - [x] Improve mobile controls
- - [ ] Check initial grid lines
- - [ ] Add modes : timers, random
- - [ ] Add settings
+ - [x] Check initial grid lines
+ - [x] Add mode random
+ - [-] Add settings
  - [ ] LocalStore session
  - [-] Add animation
+ - [ ] Add mode timer
  

@@ -105,7 +105,7 @@ export function HelpScreen({
                     <ol className="text-xl mt-2">
                         <li>Icons are from <Link className="underline" href="https://lucide.dev/">Lucide.dev</Link>.</li>
                         <li>The app is built with <Link className="underline" href="https://nextjs.org/">Next.js</Link>.</li>
-                        <li>The app is hosetd on <Link className="underline" href="https://vercel.com">Vercel</Link>.</li>
+                        <li>The app is hosted on <Link className="underline" href="https://vercel.com">Vercel</Link>.</li>
                         <li><Link className="underline" href="https://ui.shadcn.com">Shadcn</Link> is used for the UI.</li>
                         <li>The game logic is made with <Link className="underline" href="https://stately.ai">xstate</Link>.</li>
                     </ol>

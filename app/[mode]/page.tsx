@@ -18,15 +18,13 @@ export default function Page() {
   const { toast } = useToast()
   const { mode } = useParams<{ mode: string }>()
   const searchParams = useSearchParams()
+  const s : string = searchParams.get('s') || '', 
+    cs: string = searchParams.get('cs') || '',
+    c: string = searchParams.get('c') || '',
+    t: string = searchParams.get('t') || ''
 
   
-  
-  const { validParams, error, input } = useMemo(() => matrixFromParams({
-    s: searchParams.get('s') || '',
-    cs: searchParams.get('cs') || '',
-    c: searchParams.get('c') || '',
-    t: searchParams.get('t') || ''
-  }), [searchParams])
+  const { validParams, error, input } = useMemo(() => matrixFromParams({s, cs, c, t}), [searchParams])
   
   // Redirect if params are wrong
   useEffect(() => {
@@ -41,7 +39,7 @@ export default function Page() {
   }, [validParams, toast, error, router]);
   
   const [snapshot, send] = useMachine(switchMachine, { input: input });
-  
+    
   // Add random string to useEffect to avoid hydration errrors
   const [randomString, setRandomString] = useState("");
   useEffect(()=>{
@@ -83,7 +81,7 @@ export default function Page() {
       }
       <Score
         className={""}
-        randomUrl={ mode === "r" ? `/r?s=${randomString}&cs=6x8` : null}
+        randomUrl={mode === "r" ? `/r?s=${randomString}&cs=${cs ?? "6x8"}` : null}
         restart={() => send({ type: 'restart_game', params: { input: null } })}
         score={snapshot.context.score}
       />
