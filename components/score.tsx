@@ -6,6 +6,7 @@ import Link from "next/link";
 export function Score({
     className,
     score,
+    highscore,
     restart,
     randomUrl,
     ...props
@@ -18,7 +19,7 @@ export function Score({
             <div className="flex-grow flex  items-center p-3 bg-slate-200 rounded-lg">
                 <MoveHorizontal />
                 <span className="ml-4 text-xl font-bold">
-                    {score.current}
+                    {score}
                 </span>
             </div>
             { randomUrl && 
@@ -35,7 +36,7 @@ export function Score({
             </motion.div>
             <div className="flex-grow flex justify-end items-center p-3 bg-slate-200 rounded-lg">
                 <span className="mr-4 text-xl font-bold">
-                    {score.best === null ? "-" : score.best}
+                    {highscore === null ? "-" : highscore}
                 </span>
                 <Trophy />
             </div>

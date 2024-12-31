@@ -10,6 +10,7 @@ export function EndScreen({
     className,
     visible,
     score,
+    highscore,
     url,
     restart,
     initialCanva,
@@ -17,7 +18,7 @@ export function EndScreen({
 }) {
     const { toast } = useToast()
     const copyToClipboard = () => {
-        navigator.clipboard.writeText(`🎊 I solved this switch grid in ${score.best !== null && score.best < score.current ? score.best : score.current} moves. \n${getMatrixString(initialCanva)}\nTry yourself !\nhttps://switch.essenlive.xyz/g${url}`)
+        navigator.clipboard.writeText(`🎊 I solved this switch grid in ${highscore !== null && highscore < score ? highscore : score} moves. \n${getMatrixString(initialCanva)}\nTry yourself !\nhttps://switch.essenlive.xyz/g${url}`)
         toast({
             title: "Copied to clipboard",
             description: "You can now share your score with your friends",
@@ -44,7 +45,7 @@ export function EndScreen({
                         <Share2 /> Share best
                     </Button>
                 </motion.div>         
-            {score.best === null ? (
+            {highscore === null ? (
                 <>
                     <div className="py-4">
                         <Medal size={32} />
@@ -53,12 +54,12 @@ export function EndScreen({
                         Easy first !
                     </h2>
                     <p className="flex-grow text-xl my-4">
-                        You solved the grid in <span className="font-bold">{score.current}</span> moves, that makes it the first score to beat.
+                        You solved the grid in <span className="font-bold">{score}</span> moves, that makes it the first score to beat.
                     </p>
                 </>
         ) : (<>
 
-            {score.current <= score.best ? (
+            {score <= highscore ? (
                 <>
                     <div className="py-4">
                         <Trophy size={32} />
@@ -67,7 +68,7 @@ export function EndScreen({
                         New highscore !
                     </h2>
                     <p className="flex-grow text-xl my-4">
-                                You solved the grid in <span className="font-bold">{score.current}</span> moves. It is <span className="font-bold">{Math.abs(score.current - score.best)}</span> moves less than the previous best.
+                                You solved the grid in <span className="font-bold">{score}</span> moves. It is <span className="font-bold">{Math.abs(score - highscore)}</span> moves less than the previous best.
                     </p>
                 </>
             ) : (
@@ -79,7 +80,7 @@ export function EndScreen({
                         Good Job !
                     </h2>
                     <p className="flex-grow text-xl my-4">
-                        You solved the grid in <span className="font-bold">{score.current}</span> moves. Now try to beat the highscore of <span className="font-bold">{score.best}</span> moves.
+                        You solved the grid in <span className="font-bold">{score}</span> moves. Now try to beat the highscore of <span className="font-bold">{highscore}</span> moves.
                     </p>
             </>
         )}

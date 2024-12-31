@@ -10,7 +10,7 @@ import { useSearchParams, useParams, useRouter } from 'next/navigation'
 import { matrixFromParams } from "@/lib/matrixHelpers"
 import { useToast } from "@/hooks/use-toast";
 import { useControls } from '@/hooks/use-controls';
-
+import { useLocalStorage } from "@/hooks/use-local-storage";
 import { getRandomString } from "@/lib/utils";
 
 export default function Page() {
@@ -23,9 +23,9 @@ export default function Page() {
     c: string = searchParams.get('c') || '',
     t: string = searchParams.get('t') || ''
 
-  
-  const { validParams, error, input } = useMemo(() => matrixFromParams({s, cs, c, t}), [searchParams])
-  
+  // Get canva from params
+  const { validParams, error, input } = useMemo(() => matrixFromParams({ s, cs, c, t }), [s, cs, c, t])
+
   // Redirect if params are wrong
   useEffect(() => {
     if (!validParams) {
@@ -34,12 +34,36 @@ export default function Page() {
         description: `The url is not correct : ${error}, redirecting you.`,
         duration: 5000
       })
-      router.push("/")
+      setTimeout(()=> {router.push("/")}, 1000)
     }
   }, [validParams, toast, error, router]);
   
   const [snapshot, send] = useMachine(switchMachine, { input: input });
-    
+
+// Check for highscores on actor output
+  const [localHighscores, setLocalHighscores] = useLocalStorage<object>("localHighscores", { [snapshot.context.url] :null})
+  
+  const localHighscore = useMemo(()=>{
+    if(!localHighscores[snapshot.context.url]) localHighscores[snapshot.context.url] = null;
+    return (localHighscores[snapshot.context.url])
+
+  }, [localHighscores, searchParams, snapshot.value, snapshot.context.url])
+  
+
+  useEffect(() => {
+    if(snapshot.value !== "Game_End") return
+    if (localHighscores[snapshot.context.url] === null) {
+      localHighscores[snapshot.context.url] = snapshot.context.score;
+      setLocalHighscores(localHighscores)
+    }
+    else if (localHighscores[snapshot.context.url] > snapshot.context.score){
+      localHighscores[snapshot.context.url] = snapshot.context.score;
+      setLocalHighscores(localHighscores)
+    }
+  }, [snapshot.value, snapshot.context.url])
+
+  
+
   // Add random string to useEffect to avoid hydration errrors
   const [randomString, setRandomString] = useState("");
   useEffect(()=>{
@@ -64,10 +88,11 @@ export default function Page() {
       <EndScreen
           className={""}
           visible={snapshot.value === "Game_End"}
-        url={snapshot.context.url}
-        initialCanva={snapshot.context.initialCanva}
+          url={snapshot.context.url}
+          initialCanva={snapshot.context.initialCanva}
           restart={() => send({ type: 'restart_game', params: { input: null } })}
           score={snapshot.context.score}
+          highscore={localHighscore}
         />
       
       { snapshot.value !== "Game_End" && 
@@ -84,6 +109,7 @@ export default function Page() {
         randomUrl={mode === "r" ? `/r?s=${randomString}&cs=${cs ?? "6x8"}` : null}
         restart={() => send({ type: 'restart_game', params: { input: null } })}
         score={snapshot.context.score}
+        highscore={localHighscore}
       />
     </main>
 

@@ -19,10 +19,7 @@ type Input = {
 const switchMachine = setup({
     types: {
         context: {} as {
-            score: {
-                current: number,
-                best : number | null,
-            };
+            score: number;
             cursor: {
                 x: number,
                 y: number,
@@ -120,24 +117,12 @@ const switchMachine = setup({
         }),
         increment_score: assign(({ context }) => {
             const clonedContext = structuredClone(context);
-            clonedContext.score.current = clonedContext.score.current + 1;
-            return clonedContext;
-        }),
-        update_best_score: assign(({ context }) => {
-            
-            const clonedContext = structuredClone(context);
-            if (clonedContext.score.best === null) {
-                clonedContext.score.best = clonedContext.score.current;
-            }
-            else if (clonedContext.score.current < clonedContext.score.best){
-                clonedContext.score.best = clonedContext.score.current;
-            }
-
+            clonedContext.score = clonedContext.score + 1;
             return clonedContext;
         }),
         set_game: assign(({ context }, params: { input: Input | null }) => {
             const clonedContext = structuredClone(context);
-            clonedContext.score.current = 0;
+            clonedContext.score = 0;
             clonedContext.cursor = { x: 0, y: 0, value: 1 }
             if(params.input) {
                 clonedContext.url = params.input.url;
@@ -211,10 +196,7 @@ const switchMachine = setup({
 }).createMachine({
     /** @xstate-layout N4IgpgJg5mDOIC5SwO4EsAuBjAFgYgCc4MBDAjAfShIFswBtABgF1FQAHAe1kzU4Ds2IAB6IALACYANCACeiCWICcAOgDMEiQA4xAViUBGXQDZjhiQF8LM1JlwqA4rTAUAymAwBXdniaskIFw8GHyCAaIIaroSKsYA7AZKumIGjNEGCWIy8ggSUSpKEkrGjHFxagnGklY26Ng4js4UAJIQADZgeGj87J6UNJwAbgwsQkG8AkIRKTFR2loZxgZaJkrZiKZi6gbGaiVxEqVmWjUgtvWNdC3tnd29-UMMBv4c3BNhoBHlcSq6B2KmNRaOIrLTSOQbHQFLRaYoSEwGNSMYqnc72JxXVodLo9PoUAbDegSF6BN4hSbhRAGAyKWL6VIMsRxRhadYIJYxJSMAwArkSIxKDSouroppYzpEWCkch+MZk0JTRBArQqIpmRJAzS7NnLXQqSTFJG6LRqJQLE7WM4ihoYlwAYRI-EGJAoAFFnW1PCRyfxfKMAuMfYqEIjSnSqro9koDsU4myJFVwxrdIxtGJSsK7Damg6nS73SRPd7Qr5nnLggrKQhisYVGUossTYY4kydWUVMDDkolGI9ozdJmLraKLnnW6PV6fb5ieX3sG4roDCpGCkTWk1GoxLCDPGWfqN8aSmCzFEB6d+JwIHAhGicLOg1WALTGNlc9QHZFlGmaVOD0VXdwvHYe9K0+BRuV+PItwODI4mMRR42UDtNBNEx4JSBI-2zTEbhAikwPZLdfkYYw-iSFlYQSNljTUOtTXglYQS0Mwz1qLNLntR0xwLIsH1eCt8JEKkSKXLRGBXZY1GWOJozjCEEDEJD4SZaNdEjaIKiwji3X4CA8I+ISQ1XFQMiMGlyhYio2RSLZ0x5ZZ4L+NI0isKwgA */
     context: ({ input }) =>({
-        score : {
-            current : 0,
-            best : null
-        },
+        score :  0,
         cursor: {
             x: 0,
             y: 0,
@@ -223,9 +205,6 @@ const switchMachine = setup({
         url : input.url,
         canva: input.canva,
         initialCanva: input.canva,
-    }),
-    output: ({ context }) => ({
-        score: context.score.current,
     }),
     id: "switch", 
     initial: "Game_Idle",
@@ -305,11 +284,7 @@ const switchMachine = setup({
             ],
         },
 
-        "Game_End": {
-            exit: {
-                type: "update_best_score",
-            },
-        },
+        "Game_End": {},
 
     },
 

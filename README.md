@@ -51,8 +51,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
  - [x] Improve mobile controls
  - [x] Check initial grid lines
  - [x] Add mode random
+ - [x] LocalStore session
  - [-] Add settings
- - [ ] LocalStore session
  - [-] Add animation
+ - [-] Add better score sharing (add to local sessions)
  - [ ] Add mode timer
  
