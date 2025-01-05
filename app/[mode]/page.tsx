@@ -22,6 +22,7 @@ export default function Page() {
     cs: string = searchParams.get('cs') || '',
     c: string = searchParams.get('c') || '',
     t: string = searchParams.get('t') || ''
+    // , fh: string = searchParams.get('fh') || ''
 
   // Get canva from params
   const { validParams, error, input } = useMemo(() => matrixFromParams({ s, cs, c, t }), [s, cs, c, t])
@@ -40,27 +41,46 @@ export default function Page() {
   
   const [snapshot, send] = useMachine(switchMachine, { input: input });
 
-// Check for highscores on actor output
-  const [localHighscores, setLocalHighscores] = useLocalStorage<object>("localHighscores", { [snapshot.context.url] :null})
+  const [localHighscores, setLocalHighscores] = useLocalStorage<object>("localHighscores", { [snapshot.context.url]: null })
   
-  const localHighscore = useMemo(()=>{
-    if(!localHighscores[snapshot.context.url]) localHighscores[snapshot.context.url] = null;
-    return (localHighscores[snapshot.context.url])
-
+  const localHighscore = useMemo(() => {
+    if (!localHighscores[snapshot.context.url]) localHighscores[snapshot.context.url] = null;
+    return (localHighscores[snapshot.context.url])    
   }, [localHighscores, searchParams, snapshot.value, snapshot.context.url])
-  
 
   useEffect(() => {
-    if(snapshot.value !== "Game_End") return
+    if (snapshot.value !== "Game_End") return
     if (localHighscores[snapshot.context.url] === null) {
       localHighscores[snapshot.context.url] = snapshot.context.score;
       setLocalHighscores(localHighscores)
     }
-    else if (localHighscores[snapshot.context.url] > snapshot.context.score){
+    else if (localHighscores[snapshot.context.url] > snapshot.context.score) {
       localHighscores[snapshot.context.url] = snapshot.context.score;
       setLocalHighscores(localHighscores)
     }
-  }, [snapshot.value, snapshot.context.url])
+  }, [snapshot.value, snapshot.context.url, localHighscores, setLocalHighscores, snapshot.context.score])
+  
+  // const [friendHighscores, setFriendHighscores] = useLocalStorage<object>("friendHighscores", { [snapshot.context.url]: null })
+
+  // const friendHighscore = useMemo(() => {
+  //   if (!friendHighscores[snapshot.context.url]) friendHighscores[snapshot.context.url] = null;
+  //   return (friendHighscores[snapshot.context.url])
+  // }, [friendHighscores, searchParams, snapshot.context.url, snapshot])
+
+  // useEffect(() => {
+  //   if (isNaN(Number(fh))) return
+  //   if (friendHighscores[snapshot.context.url] === null) {
+  //     friendHighscores[snapshot.context.url] = Number(fh);
+  //     setFriendHighscores(friendHighscores)
+  //     console.log('initial friend score');
+      
+  //   }
+  //   else if (friendHighscores[snapshot.context.url] > Number(fh)){
+  //     friendHighscores[snapshot.context.url] = Number(fh);
+  //     setFriendHighscores(friendHighscores)
+  //     console.log('new friend score');
+  //   }
+  // }, [fh, snapshot.context.url])
 
   
 
@@ -92,7 +112,7 @@ export default function Page() {
           initialCanva={snapshot.context.initialCanva}
           restart={() => send({ type: 'restart_game', params: { input: null } })}
           score={snapshot.context.score}
-          highscore={localHighscore}
+        highscore={localHighscore}
         />
       
       { snapshot.value !== "Game_End" && 

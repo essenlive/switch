@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={nunito.className}>
       
-      <body className={`antialiased  text-black relative flex flex-col p-4 space-y-4 justify-start min-h-dvh max-w-xl mx-auto bg-gray-100`}>
+      <body className={`overscroll-contain antialiased  text-black relative flex flex-col p-4 space-y-4 justify-start min-h-dvh max-w-xl mx-auto bg-gray-100`}>
           <Header />
           <Suspense>
             { children }

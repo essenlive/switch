@@ -6,7 +6,7 @@ import Link from "next/link";
 export function Score({
     className,
     score,
-    highscore,
+    highscore, 
     restart,
     randomUrl,
     ...props
@@ -34,6 +34,7 @@ export function Score({
             <motion.div whileHover={{ scale: 1.1 }} className="flex justify-center items-center p-3 aspect-square cursor-pointer bg-slate-200 rounded-lg" onClick={restart}>
                 <RotateCcw />
             </motion.div>
+
             <div className="flex-grow flex justify-end items-center p-3 bg-slate-200 rounded-lg">
                 <span className="mr-4 text-xl font-bold">
                     {highscore === null ? "-" : highscore}
