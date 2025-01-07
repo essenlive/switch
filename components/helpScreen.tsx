@@ -35,10 +35,13 @@ export function HelpScreen({
                 </h2>
                 <p className="text-xl mt-2">
                     This mini game is inspired from memory of the game Russpack that I used to play on the Archos Gmini400 media player. All the credits goes to the original creator of the game.
-                </p>
-                <p className="text-xl mt-2">
-                    I rebuilt it because I could not find a playable instance.
-                </p>
+                            </p>
+                            <p className="text-xl mt-2">
+                                I rebuilt it because I could not find a playable instance.
+                            </p>
+                            <p className="text-xl mt-2">
+                                Minimalist usage tracking is done with <Link className="underline" href="https://umami.is/" target="_blank" rel="noopener noreferrer">Umami</Link>.
+                            </p>
                 </div>
                 <div className="flex-grow flex flex-col p-8 bg-slate-200 rounded-lg">
                     <div className="py-4">
