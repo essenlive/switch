@@ -32,7 +32,7 @@ export default function RootLayout({
           data-website-id={process.env.NEXT_PUBLIC_ANALYTICS_ID}
           strategy="afterInteractive" 
         />
-      }
+    }
 
       <body className={`overscroll-contain antialiased  text-black relative flex flex-col p-4 space-y-4 justify-start min-h-dvh max-w-xl mx-auto bg-gray-100`}>
           <Header />

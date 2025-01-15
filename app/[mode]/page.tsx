@@ -40,6 +40,7 @@ export default function Page() {
   }, [validParams, toast, error, router]);
   
   const [snapshot, send] = useMachine(switchMachine, { input: input });
+  
 
   const [localHighscores, setLocalHighscores] = useLocalStorage<object>("localHighscores", { [snapshot.context.url]: null })
   
@@ -109,7 +110,6 @@ export default function Page() {
           className={""}
           visible={snapshot.value === "Game_End"}
           url={snapshot.context.url}
-          initialCanva={snapshot.context.initialCanva}
           restart={() => send({ type: 'restart_game', params: { input: null } })}
           score={snapshot.context.score}
         highscore={localHighscore}
@@ -120,6 +120,7 @@ export default function Page() {
           <Grid 
             className={""}
             canva={snapshot.context.canva}
+            canvaIndexes={snapshot.context.canvaIndexes}
             cursor={snapshot.context.cursor}
           />
         </div>
