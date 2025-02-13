@@ -32,24 +32,44 @@ export function Grid({
     
 
     const indexes = useMemo(() => {
+
+
+        let canvaRowIndex = 0;
+        let preparedCanva = canvaIndexes.rows.map((row, rowIndex) => {
+
+            let canvaColumnIndex = 0;
+            let preparedRow = canvaIndexes.columns.map((cell, columnIndex) => {
+                let value;
+                if (cell.visible && row.visible) {
+                    value = input.canva[canvaRowIndex][canvaColumnIndex];
+                }
+                else {
+                    value = null;
+                }
+                if (cell.visible) canvaColumnIndex++
+                return value;
+
+            });
+
+            if (row.visible) canvaRowIndex++
+            return preparedRow;
+        });
+
+
         return {
             rows: ['bot', ...canvaIndexes.rows, 'top'],
             columns: ['left', ...canvaIndexes.columns, 'right']
         };
     }, [canva, canvaIndexes]);
+    console.log(canvaIndexes, indexes);
 
     return (
         <div className={cn("flex-grow flex items-center justify-center flex-col-reverse  gap-2", className)} {...props}>
 
-            <AnimatePresence>
                  {addPadding(canva, 0).map((row, y) => (
                      <motion.div 
                          key={`row-${indexes.rows[y]}`} 
                          className={`row-${indexes.rows[y]} flex gap-2`}
-                         initial={{ opacity: 0 }}
-                         animate={{  opacity: 1 }}
-                         exit={{ opacity: 0 }}
-                         transition={transition}
                      >
                     <AnimatePresence>
                         {row.map((cell, x) => (
@@ -76,7 +96,6 @@ export function Grid({
                         </AnimatePresence>
                     </motion.div>
                 ))}
-                </AnimatePresence>
         </div>
     )
 }

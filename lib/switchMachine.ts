@@ -27,8 +27,14 @@ const switchMachine = setup({
             };
             canva: number[][];
             canvaIndexes : {
-                rows : number[],
-                columns: number[]
+                rows : {
+                    index : number
+                    visible : boolean
+                }[],
+                columns: {
+                    index: number
+                    visible: boolean
+                }[]
             };
             initialCanva: number[][];
             url : string;
@@ -132,13 +138,13 @@ const switchMachine = setup({
                 clonedContext.url = params.input.url;
                 clonedContext.canva = structuredClone(params.input.canva);
                 clonedContext.initialCanva = structuredClone(params.input.canva);
-                clonedContext.canvaIndexes.rows = Array.from({ length: params.input.canva.length }, (_, i) => i);
-                clonedContext.canvaIndexes.columns = Array.from({ length: params.input.canva[0].length }, (_, i) => i);
+                clonedContext.canvaIndexes.rows = Array.from({ length: params.input.canva.length }, (_, i) => ({ index : i, visible : true}));
+                clonedContext.canvaIndexes.columns = Array.from({ length: params.input.canva[0].length }, (_, i) => ({ index: i, visible: true }));
             }
             else{
                 clonedContext.canva = structuredClone(clonedContext.initialCanva);
-                clonedContext.canvaIndexes.rows = Array.from({ length: clonedContext.initialCanva.length }, (_, i) => i);
-                clonedContext.canvaIndexes.columns = Array.from({ length: clonedContext.initialCanva[0].length }, (_, i) => i);
+                clonedContext.canvaIndexes.rows = Array.from({ length: clonedContext.initialCanva.length }, (_, i) => ({ index : i, visible : true}));
+                clonedContext.canvaIndexes.columns = Array.from({ length: clonedContext.initialCanva[0].length }, (_, i) => ({ index : i, visible : true}));
             }
 
             return clonedContext;
@@ -151,7 +157,7 @@ const switchMachine = setup({
                     clonedContext.canva,
                     rows[0],
                 );
-                clonedContext.canvaIndexes.rows.splice(rows[0], 1);
+                clonedContext.canvaIndexes.rows[rows[0]].visible = false;
                 clonedContext.cursor.y =
                 clonedContext.cursor.y === 0 ? 0 : clonedContext.cursor.y - 1;
             } else if (columns.length > 0) {
@@ -159,7 +165,7 @@ const switchMachine = setup({
                     clonedContext.canva,
                     columns[0],
                 );
-                clonedContext.canvaIndexes.columns.splice(columns[0], 1);
+                clonedContext.canvaIndexes.columns[columns[0]].visible = false;
                 clonedContext.cursor.x =
                 clonedContext.cursor.x === 0 ? 0 : clonedContext.cursor.x - 1;
             }
@@ -216,8 +222,8 @@ const switchMachine = setup({
         canva: input.canva,
         initialCanva: input.canva,
         canvaIndexes: {
-            rows: Array.from({ length: input.canva.length }, (_, i) => i),
-            columns: Array.from({ length: input.canva[0].length }, (_, i) => i),
+            rows: Array.from({ length: input.canva.length }, (_, i) => ({ index: i, visible: true })),
+            columns: Array.from({ length: input.canva[0].length }, (_, i) => ({ index: i, visible: true })),
         }
     }),
     id: "switch", 
