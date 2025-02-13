@@ -97,6 +97,7 @@ const [localHighscoresInputs, setLocalHighscoresInputs] = useLocalStorage<object
           url={snapshot.context.url}
           restart={() => send({ type: 'restart_game', params: { input: null } })}
           score={snapshot.context.score}
+          inputsList={snapshot.context.inputList}
           highscoreInputs={localHighscoreInputs}
           highscore={localHighscore}
           initialCanva={snapshot.context.initialCanva}

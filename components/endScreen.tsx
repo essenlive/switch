@@ -16,11 +16,11 @@ function getInputListIcons(inputList: Direction[]):string{
     return inputList.map(input=>DIRECTION_ARROWS.get(input)).join(' ')
 
 }
-
 export function EndScreen({
     className,
     visible,
     score,
+    inputsList,
     highscore,
     highscoreInputs,
     url,
@@ -36,7 +36,7 @@ export function EndScreen({
 
         }
         else if(options === 'withInputs'){
-            clipboardContent = `🎊 I solved this switch grid in ${highscore !== null && highscore < score ? highscore : score} moves. \nHere is my solution : ${getInputListIcons(highscoreInputs)}\nTry yourself !\nhttps://switch.essenlive.xyz/g${url}`
+            clipboardContent = `🎊 I solved this switch grid in ${highscore !== null && highscore < score ? highscore : score} moves. \nHere is my solution : ${highscore !== null && highscore < score ? getInputListIcons(highscoreInputs) : getInputListIcons(inputsList)}\nTry yourself !\nhttps://switch.essenlive.xyz/g${url}`
 
         }
         else{
