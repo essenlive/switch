@@ -9,7 +9,7 @@ import {
     addToRowStart
 } from "@/lib/matrixHelpers"
 
-type Direction = "up" | "left" | "down" | "right";
+export type Direction = "up" | "left" | "down" | "right";
 type Input = {
     canva: number[][],
     timerMode: boolean,
@@ -19,6 +19,7 @@ type Input = {
 const switchMachine = setup({
     types: {
         context: {} as {
+            inputList : Direction[]
             score: number;
             cursor: {
                 x: number,
@@ -119,8 +120,9 @@ const switchMachine = setup({
             clonedContext.cursor.value = newData.removedValue;
             return clonedContext;
         }),
-        increment_score: assign(({ context }) => {
+        increment_score: assign(({ context }, params: { direction: Direction }) => {
             const clonedContext = structuredClone(context);
+            clonedContext.inputList.push(params.direction)
             clonedContext.score = clonedContext.score + 1;
             return clonedContext;
         }),
@@ -128,6 +130,7 @@ const switchMachine = setup({
             const clonedContext = structuredClone(context);
             clonedContext.score = 0;
             clonedContext.cursor = { x: 0, y: 0, value: 1 }
+            clonedContext.inputList = [];
             if(params.input) {
                 clonedContext.url = params.input.url;
                 clonedContext.canva = structuredClone(params.input.canva);
@@ -206,6 +209,7 @@ const switchMachine = setup({
 }).createMachine({
     /** @xstate-layout N4IgpgJg5mDOIC5SwO4EsAuBjAFgYgCc4MBDAjAfShIFswBtABgF1FQAHAe1kzU4Ds2IAB6IALACYANCACeiCWICcAOgDMEiQA4xAViUBGXQDZjhiQF8LM1JlwqA4rTAUAymAwBXdniaskIFw8GHyCAaIIaroSKsYA7AZKumIGjNEGCWIy8ggSUSpKEkrGjHFxagnGklY26Ng4js4UAJIQADZgeGj87J6UNJwAbgwsQkG8AkIRKTFR2loZxgZaJkrZiKZi6gbGaiVxEqVmWjUgtvWNdC3tnd29-UMMBv4c3BNhoBHlcSq6B2KmNRaOIrLTSOQbHQFLRaYoSEwGNSMYqnc72JxXVodLo9PoUAbDegSF6BN4hSbhRAGAyKWL6VIMsRxRhadYIJYxJSMAwArkSIxKDSouroppYzpEWCkch+MZk0JTRBArQqIpmRJAzS7NnLXQqSTFJG6LRqJQLE7WM4ihoYlwAYRI-EGJAoAFFnW1PCRyfxfKMAuMfYqEIjSnSqro9koDsU4myJFVwxrdIxtGJSsK7Damg6nS73SRPd7Qr5nnLggrKQhisYVGUossTYY4kydWUVMDDkolGI9ozdJmLraKLnnW6PV6fb5ieX3sG4roDCpGCkTWk1GoxLCDPGWfqN8aSmCzFEB6d+JwIHAhGicLOg1WALTGNlc9QHZFlGmaVOD0VXdwvHYe9K0+BRuV+PItwODI4mMRR42UDtNBNEx4JSBI-2zTEbhAikwPZLdfkYYw-iSFlYQSNljTUOtTXglYQS0Mwz1qLNLntR0xwLIsH1eCt8JEKkSKXLRGBXZY1GWOJozjCEEDEJD4SZaNdEjaIKiwji3X4CA8I+ISQ1XFQMiMGlyhYio2RSLZ0x5ZZ4L+NI0isKwgA */
     context: ({ input }) =>({
+        inputList: [],
         score :  0,
         cursor: {
             x: 0,
@@ -250,7 +254,10 @@ const switchMachine = setup({
                                 params: ({ event }) => ({ direction: event.params.direction })
 
                             },
-                            { type: "increment_score"}
+                            { 
+                                type: "increment_score",
+                                params: ({ event }) => ({ direction: event.params.direction })
+                            }
                         ],
                         guard: {
                             type: "is_cursor_move",
@@ -267,6 +274,7 @@ const switchMachine = setup({
                             },
                             { 
                                 type: "increment_score",
+                                params: ({ event }) => ({ direction: event.params.direction })
                              }
                         ],
                     },
