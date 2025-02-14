@@ -12,8 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useControls } from '@/hooks/use-controls';
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { getRandomString } from "@/lib/utils";
-// import { InputList } from "@/components/inputList";
-
+import { InputList } from '@/components/inputList';
 
 export default function Page() {
   const router = useRouter()
@@ -122,6 +121,13 @@ const [localHighscoresInputs, setLocalHighscoresInputs] = useLocalStorage<object
         score={snapshot.context.score}
         highscore={localHighscore}
       />
+      <div className=" bg-slate-200 rounded-lg px-4">
+
+              <InputList 
+                inputList={snapshot.context.inputList}
+                inputIndex={snapshot.context.score - 1} 
+                />
+      </div>
     </main>
 
 
