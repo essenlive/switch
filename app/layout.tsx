@@ -34,13 +34,16 @@ export default function RootLayout({
         />
     }
 
-      <body className={`overscroll-contain antialiased  text-black relative flex flex-col p-4 space-y-4 justify-start min-h-dvh max-w-xl mx-auto bg-gray-100`}>
+      <body className=" bg-gray-100">
+         <div className={`overscroll-contain antialiased  text-black relative flex flex-col p-4 space-y-4 justify-start min-h-dvh max-w-xl mx-auto`}>
+
           <Header />
           <Suspense>
             { children }
 
           </Suspense>
           <Toaster />
+         </div>
       </body>
     </html>
   );

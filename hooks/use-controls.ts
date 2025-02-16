@@ -4,15 +4,15 @@ import { useCallback, useEffect } from 'react';
 let moveThreshold: number = 0;
 
 interface Actions {
-  ArrowLeft: () => void;
-  ArrowRight: () => void;
-  ArrowUp: () => void;
-  ArrowDown: () => void;
-  Space: () => void;
-  SwipeLeft: () => void;
-  SwipeRight: () => void;
-  SwipeUp: () => void;
-  SwipeDown: () => void;
+  ArrowLeft?: () => void;
+  ArrowRight?: () => void;
+  ArrowUp?: () => void;
+  ArrowDown?: () => void;
+  Space?: () => void;
+  SwipeLeft?: () => void;
+  SwipeRight?: () => void;
+  SwipeUp?: () => void;
+  SwipeDown?: () => void;
 }
 
 
@@ -22,23 +22,23 @@ export function useControls(actions: Actions) {
     switch (event.key) {
       case "ArrowLeft":
         event.preventDefault();
-        actions["ArrowLeft"]();
+        if(actions["ArrowLeft"])actions["ArrowLeft"]();
         break;
       case "ArrowRight":
         event.preventDefault();
-        actions["ArrowRight"]();
+        if(actions["ArrowRight"])actions["ArrowRight"]();
         break;
       case "ArrowUp":
         event.preventDefault();
-        actions["ArrowUp"]();
+        if(actions["ArrowUp"])actions["ArrowUp"]();
         break;
       case "ArrowDown":
         event.preventDefault();
-        actions["ArrowDown"]();
+        if(actions["ArrowDown"])actions["ArrowDown"]();
         break;
       case " ":
         event.preventDefault();
-        actions["Space"]();
+        if(actions["Space"])actions["Space"]();
         break;
       default: break;
     }
@@ -59,10 +59,10 @@ export function useControls(actions: Actions) {
         if (SwipeEventData.first) { moveThreshold = firstThreshold; }
         else { moveThreshold = moveThreshold + successiveThresholds; }
         switch (SwipeEventData.dir) {
-          case 'Left': actions["SwipeLeft"](); break;
-          case 'Right': actions["SwipeRight"](); break;
-          case 'Up': actions["SwipeUp"](); break;
-          case 'Down': actions["SwipeDown"](); break;
+          case 'Left': if(actions["SwipeLeft"])actions["SwipeLeft"](); break;
+          case 'Right': if(actions["SwipeRight"])actions["SwipeRight"](); break;
+          case 'Up': if(actions["SwipeUp"])actions["SwipeUp"](); break;
+          case 'Down': if(actions["SwipeDown"])actions["SwipeDown"](); break;
         }
       }
     },

@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 import { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from "motion/react";
-import { type Direction } from "@/lib/switchMachine";
+import { type Direction } from "@/lib/inputs";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 
 const DIRECTION_ARROWS = new Map(Object.entries({

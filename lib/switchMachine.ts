@@ -8,8 +8,10 @@ import {
     addToRowEnd, 
     addToRowStart
 } from "@/lib/matrixHelpers"
+import { type Direction } from "@/lib/inputs";
 
-export type Direction = "up" | "left" | "down" | "right";
+
+
 type Input = {
     canva: number[][],
     timerMode: boolean,

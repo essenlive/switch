@@ -4,18 +4,8 @@ import { Share2, TextQuote, CircleArrowRight, PartyPopper, Trophy, Medal } from 
 import { useToast } from "@/hooks/use-toast"
 import { motion, AnimatePresence} from "motion/react"
 import { getMatrixString } from "@/lib/matrixHelpers"
-import { type Direction } from "@/lib/switchMachine";
+import { getInputListIcons, getInputListStringUrl } from "@/lib/inputs"
 
-function getInputListIcons(inputList: Direction[]):string{
-    const DIRECTION_ARROWS = new Map(Object.entries({
-        'up': "⬆️",
-        'right': "➡️",
-        'down': "⬇️",
-        'left': '⬅️',
-    }))
-    return inputList.map(input=>DIRECTION_ARROWS.get(input)).join(' ')
-
-}
 export function EndScreen({
     className,
     visible,
@@ -28,19 +18,29 @@ export function EndScreen({
     initialCanva,
     ...props
 }) {
+        
+    let host: string = "localhost:3000", protocol =""
+    if (typeof window !== 'undefined') { 
+        host = window.location.host;
+        protocol = window.location.protocol ?? ""
+    }
     const { toast } = useToast()
-    const copyToClipboard = (options? : undefined | 'withCanva' | 'withInputs') => {
+    const copyToClipboard = (options? : undefined | 'withCanva' | 'withInputs' | 'withInputsUrl') => {
         let clipboardContent: string = ''
         if(options === 'withCanva'){
-            clipboardContent = `🎊 I solved this switch grid in ${highscore !== null && highscore < score ? highscore : score} moves. \n${getMatrixString(initialCanva)}\nTry yourself !\nhttps://switch.essenlive.xyz/g${url}`
+            clipboardContent = `🎊 I solved this switch grid in ${highscore !== null && highscore < score ? highscore : score} moves. \n${getMatrixString(initialCanva)}\nTry yourself !\n ${protocol}//${host}/g${url}`
 
         }
         else if(options === 'withInputs'){
-            clipboardContent = `🎊 I solved this switch grid in ${highscore !== null && highscore < score ? highscore : score} moves. \nHere is my solution : ${highscore !== null && highscore < score ? getInputListIcons(highscoreInputs) : getInputListIcons(inputsList)}\nTry yourself !\nhttps://switch.essenlive.xyz/g${url}`
+            clipboardContent = `🎊 I solved this switch grid in ${highscore !== null && highscore < score ? highscore : score} moves. \nHere is my solution : ${highscore !== null && highscore < score ? getInputListIcons(highscoreInputs) : getInputListIcons(inputsList)}\nTry yourself !\n ${protocol}//${host}/g${url}`
+
+        }
+        else if(options === 'withInputsUrl'){
+            clipboardContent = `🎊 I solved this switch grid in ${highscore !== null && highscore < score ? highscore : score} moves. \n Check my solution : \n ${protocol}//${host}/replay${url}&i=${highscore !== null && highscore < score ? getInputListStringUrl(highscoreInputs) : getInputListStringUrl(inputsList)}`
 
         }
         else{
-            clipboardContent = `🎊 I solved this switch grid in ${highscore !== null && highscore < score ? highscore : score} moves.\nTry yourself !\nhttps://switch.essenlive.xyz/g${url}`
+            clipboardContent = `🎊 I solved this switch grid in ${highscore !== null && highscore < score ? highscore : score} moves.\nTry yourself !\nhttps//switch.essenlive.xyz/g${url}`
         }
         navigator.clipboard.writeText(clipboardContent)
 
@@ -72,7 +72,7 @@ export function EndScreen({
                         <Share2 /> Share best
                     </Button>
                 </motion.div>    
-                <motion.div whileHover={{ scale: 1.1 }} onClick={()=> copyToClipboard("withInputs")} className="">
+                <motion.div whileHover={{ scale: 1.1 }} onClick={()=> copyToClipboard("withInputsUrl")} className="">
                     <Button className="text-md" >
                         <TextQuote/>
                     </Button>
