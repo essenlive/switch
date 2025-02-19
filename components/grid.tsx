@@ -4,11 +4,11 @@ import { motion, AnimatePresence } from "motion/react";
 import { useMemo } from 'react';
 
 const BLOCK_COLORS = [
-    'bg-slate-100',
-    'bg-red-500',
-    'bg-blue-500',
-    'bg-green-500',
-    'bg-yellow-500',
+    'bg-gray-100 dark:bg-gray-900',
+    'bg-red-500 dark:bg-red-600',
+    'bg-blue-500 dark:bg-blue-600',
+    'bg-green-500 dark:bg-green-600',
+    'bg-yellow-500 dark:bg-yellow-600',
 ];
 const BLOCK_VALUES = [
     '',

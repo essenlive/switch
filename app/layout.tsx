@@ -5,6 +5,8 @@ import { Header } from "@/components/header";
 import { Toaster } from "@/components/ui/toaster"
 import { Suspense } from 'react'
 import Script from 'next/script'
+import { ThemeProvider } from "@/components/theme-provider"
+
 
 const nunito = Nunito({
   subsets: ['latin'],
@@ -23,7 +25,7 @@ export default function RootLayout({
 }>) {  
 
   return (
-    <html lang="en" className={nunito.className}>
+    <html lang="en" className={nunito.className} suppressHydrationWarning>
 
       {process.env.NODE_ENV !== "development" && 
       <Script 
@@ -34,13 +36,24 @@ export default function RootLayout({
         />
     }
 
-      <body className={`overscroll-contain antialiased  text-black relative flex flex-col p-4 space-y-4 justify-start min-h-dvh max-w-xl mx-auto bg-gray-100`}>
-          <Header />
-          <Suspense>
-            { children }
+      <body className={`bg-gray-100 dark:bg-gray-900`}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <main  className={`overscroll-contain antialiased  text-foreground relative flex flex-col p-4 space-y-4 justify-start min-h-dvh max-w-xl mx-auto`}>
 
-          </Suspense>
+            <Header />
+            <Suspense>
+              { children }
+
+            </Suspense>
+
+            </main>
           <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

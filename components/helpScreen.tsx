@@ -72,24 +72,6 @@ export function HelpScreen({
                     <p className="text-xl mt-2">
                         Either swipe or use the arrows to move the cursor in the right direction.
                     </p>
-                    <p className="opacity-30 text-xl mt-2">
-                        Use shift or long swipe to go faster.
-                    </p>
-                    <p className="text-xl mt-2">
-                        Press space or restart button to restart the game.
-                    </p>
-                </div>
-                <div className="flex-grow flex flex-col p-8 bg-slate-200 rounded-lg">
-                    <div className="py-4">
-
-                        <Move size={32} />
-                    </div>
-                    <h2 className="text-xl font-bold my-4">
-                        Controls
-                    </h2>
-                    <p className="text-xl mt-2">
-                        Either swipe or use the arrows to move the cursor in the right direction.
-                    </p>
                     <p className="text-xl mt-2">
                         Use a long swipe to go faster.
                     </p>

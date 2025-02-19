@@ -35,7 +35,7 @@ export default function Home() {
             cs: '6x8'
           },
         }} >
-        <motion.div whileHover={{ scale: 1.05 }} className="flex-grow flex flex-col p-4 bg-slate-200 cursor-pointer rounded-lg"> 
+        <motion.div whileHover={{ scale: 1.05 }} className="flex-grow flex flex-col p-4 bg-background cursor-pointer rounded-lg"> 
           <div className="py-4">
 
             <Sunrise size={32} />
@@ -64,7 +64,7 @@ export default function Home() {
             cs: '6x8'
           },
         }} >
-        <motion.div whileHover={{ scale: 1.05 }} className="flex-grow flex flex-col p-4 bg-slate-200  rounded-lg "> 
+        <motion.div whileHover={{ scale: 1.05 }} className="flex-grow flex flex-col p-4 bg-background  rounded-lg "> 
           <div className="py-4">
 
             <Dices size={32} />
@@ -85,7 +85,7 @@ export default function Home() {
       </Link>
       
       <Link onClick={notAvailable} href="" className="flex-grow ">
-        <motion.div whileHover={{ scale: 1.05 }} className="flex-grow flex flex-col p-4 bg-slate-200  cursor-not-allowed opacity-30 rounded-lg">
+        <motion.div whileHover={{ scale: 1.05 }} className="flex-grow flex flex-col p-4 bg-background  cursor-not-allowed opacity-30 rounded-lg">
 
           <div className="py-4">
 

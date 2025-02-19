@@ -36,12 +36,12 @@ export function InputList({
     return (
        <>
         { inputList.length === 0 ? (
-            <div className='min-h-6 my-4 font-semibold'>
+            <div className='min-h-6 my-4 font-semibold text-sm'>
                 No inputs logged yet. Use swipes or arrows to move.
             </div>
         ) : (
-            <ScrollArea className="w-full whitespace-nowrap rounded-md border">
-                <div className={cn("flex space-x-2 items-center min-h-6 my-4", className)}>
+            <ScrollArea className="w-full whitespace-nowrap rounded-md ">
+                <div className={cn("flex space-x-2 items-center min-h-6 my-4 ", className)}>
                     <AnimatePresence>
                         {inputList.map((input, i) => (
 
@@ -54,7 +54,7 @@ export function InputList({
                                 exit={{ opacity: 0 }}
                                 transition={transition}
                                 className={cn(
-                                    i === inputIndex && "bg-background ring-1 ring-inset",
+                                    i === inputIndex && "bg-background ring-foreground ring-1 ring-inset",
                                     "cursor-pointer aspect-square w-6 h-6 rounded-sm flex justify-center items-center align-middle text-center"
                                 )}
                             >

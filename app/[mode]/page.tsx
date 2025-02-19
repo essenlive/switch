@@ -104,7 +104,7 @@ const [localHighscoresInputs, setLocalHighscoresInputs] = useLocalStorage<object
         />
       
       { snapshot.value !== "Game_End" && 
-        <div className="flex flex-grow p-4 bg-slate-200 rounded-lg relative"  {...gestureHandlers}>
+        <div className="flex flex-grow p-4 bg-background rounded-lg relative"  {...gestureHandlers}>
           <h3 className="absolute top-4 left-4 text-slate-500 font-bold text-l">{snapshot.context.url.replace("?","")}</h3>
           <Grid 
             className={""}
@@ -121,7 +121,7 @@ const [localHighscoresInputs, setLocalHighscoresInputs] = useLocalStorage<object
         score={snapshot.context.score}
         highscore={localHighscore}
       />
-      <div className=" bg-slate-200 rounded-lg px-4">
+      <div className="bg-background rounded-lg px-4">
 
               <InputList 
                 inputList={snapshot.context.inputList}

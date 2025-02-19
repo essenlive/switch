@@ -16,7 +16,7 @@ export function Score({
 
     return (
         <div className={cn("flex space-x-4 w-full", className)} {...props}>
-            <div className="flex-grow flex  items-center p-3 bg-slate-200 rounded-lg">
+            <div className="flex-grow flex  items-center p-3 bg-background rounded-lg">
                 <MoveHorizontal />
                 <span className="ml-4 text-xl font-bold">
                     {score}
@@ -26,16 +26,16 @@ export function Score({
                 <Link
                 className="flex"
                 href={randomUrl} >
-                    <motion.div className="flex justify-center items-center p-3 aspect-square cursor-pointer bg-slate-200 rounded-lg" onClick={restart}>
+                    <motion.div className="flex justify-center items-center p-3 aspect-square cursor-pointer bg-background rounded-lg" onClick={restart}>
                         <Dices />
                     </motion.div>
                 </Link>
             }
-            <motion.div whileHover={{ scale: 1.1 }} className="flex justify-center items-center p-3 aspect-square cursor-pointer bg-slate-200 rounded-lg" onClick={restart}>
+            <motion.div whileHover={{ scale: 1.1 }} className="flex justify-center items-center p-3 aspect-square cursor-pointer bg-background rounded-lg" onClick={restart}>
                 <RotateCcw />
             </motion.div>
 
-            <div className="flex-grow flex justify-end items-center p-3 bg-slate-200 rounded-lg">
+            <div className="flex-grow flex justify-end items-center p-3 bg-background rounded-lg">
                 <span className="mr-4 text-xl font-bold">
                     {highscore === null ? "-" : highscore}
                 </span>
